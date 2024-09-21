@@ -164,7 +164,7 @@ fun Perfil(innerPadding: PaddingValues) {
                     fontSize = 15.sp)
             }
 
-            Text(text = stringResource(R.string.Descripción),
+            Text(text = stringResource(R.string.Descripcion),
                 fontSize = 15.sp,
                 modifier = Modifier
                     .offset(x = 13.dp, y = 130.dp)
