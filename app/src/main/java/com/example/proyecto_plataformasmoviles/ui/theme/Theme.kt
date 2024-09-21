@@ -33,6 +33,21 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
+val cocoFontFamily = FontFamily(
+    Font(R.font.cocogothicfattrial, FontWeight.ExtraBold),
+    Font(R.font.cocogothicboldtrial, FontWeight.Bold),
+    Font(R.font.cocogothicultralighttrial, FontWeight.ExtraLight),
+    Font(R.font.cocogothicultralightitalictrial, FontWeight.ExtraLight),
+    Font(R.font.cocogothiclighttrial, FontWeight.Light),
+    Font(R.font.cocogothiclightitalictrial, FontWeight.Light),
+    Font(R.font.cocogothicitalictrial, FontWeight.Normal),
+    Font(R.font.cocogothicheavytrial, FontWeight.Bold),
+    Font(R.font.cocogothicheavyitalictrial, FontWeight.Bold),
+    Font(R.font.cocogothicfatitalictrial, FontWeight.ExtraBold),
+    Font(R.font.cocogothicbolditalictrial, FontWeight.Bold),
+    Font(R.font.cocogothictrial, FontWeight.Normal)
+)
+
 @Composable
 fun Proyecto_plataformasMovilesTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
