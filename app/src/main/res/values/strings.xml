@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Proyecto_plataformasMoviles</string>
+
+    //strings pantalla perfil
+    <string name="Perfil">PERFIL</string>
+    <string name="Nombre">Leah</string>
+    <string name="Numero_likes">132,185</string>
+    <string name="Descripción">Leah es una hembra de la raza Westie que vive en Mixco. Tiene 7 años y pedrigree. No tiene enfermedades ni ha tenido pareja con anterioridad.</string>
+
 </resources>
