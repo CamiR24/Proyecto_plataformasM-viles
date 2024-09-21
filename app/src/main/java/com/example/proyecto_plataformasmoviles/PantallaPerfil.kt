@@ -38,6 +38,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.proyecto_plataformasmoviles.ui.theme.Proyecto_plataformasMovilesTheme
 
 class PantallaPerfil : ComponentActivity() {
@@ -47,10 +49,8 @@ class PantallaPerfil : ComponentActivity() {
         setContent {
             Proyecto_plataformasMovilesTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    Perfil(
+                        innerPadding = PaddingValues())
                 }
             }
         }
@@ -59,7 +59,7 @@ class PantallaPerfil : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CenterAlignedTopAppBar_Perfil() {
+fun CenterAlignedTopAppBar_Perfil(navController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
@@ -179,8 +179,10 @@ fun Perfil(innerPadding: PaddingValues) {
     showSystemUi = true)
 @Composable
 fun PerfilPreview() {
+    val navController = rememberNavController()
+
     Proyecto_plataformasMovilesTheme {
         Perfil(innerPadding= PaddingValues())
-        CenterAlignedTopAppBar_Perfil()
+        CenterAlignedTopAppBar_Perfil(navController = navController)
     }
 }
