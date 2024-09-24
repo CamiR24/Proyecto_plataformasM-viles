@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,7 +38,7 @@ fun DogMatchScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFbb4491))
+            .background(colorResource(id = R.color.Fondo))
     ) {
         Column(
             modifier = Modifier
@@ -68,7 +69,7 @@ fun LeahProfileSection() {
             modifier = Modifier
                 .size(64.dp)
                 .clip(CircleShape)
-                .background(Color(0xFFb8a0e8)) // Color del círculo
+                .background(Color(0xFFb8a0e8))
         )
         Spacer(modifier = Modifier.width(8.dp))
         // Nombre de Leah
@@ -115,7 +116,7 @@ fun CircularProfile(name: String, imageRes: Int) {
             modifier = Modifier
                 .size(100.dp)
                 .clip(CircleShape)
-                .background(Color(0xFFb8a0e8)) // Color del círculo
+                .background(colorResource(id = R.color.circlePurple))
         )
         Spacer(modifier = Modifier.height(8.dp))
         //intento de nombre curvado
@@ -136,7 +137,7 @@ fun NextButtonAndClouds() {
         //boton a siguiente nav
         Button(
             onClick = { /* pam pam a noti o chat? */ },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Magenta)
+            colors = ButtonDefaults.buttonColors(colorResource(id = R.color.petPurple))
         ) {
             Text(text = "Siguiente", color = Color.White)
         }
