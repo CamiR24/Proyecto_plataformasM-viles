@@ -52,7 +52,7 @@ fun App(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "Perfil",
+            startDestination = "Registro",
             modifier = modifier.padding(innerPadding)
         ) {
             /*composable(route = "Screen1") { //inicio de sesión
@@ -62,25 +62,20 @@ fun App(
                         navController
                     )
                 }
+            }*/
+
+            composable(route = "Registro") { //registro
+                Registro(innerPadding, navController)
             }
 
-            composable(route = "Screen2") { //registro
-                SecondActivity(modifier = Modifier
-                    .fillMaxSize()
-                    .wrapContentSize(Alignment.Center)
-                    .background(Color.White),
-                    navController
-                )
-            }
-
-            composable(route = "Screen3") { //notificaciones
+            /*composable(route = "Screen3") { //notificaciones
                 ThirdActivity(modifier = Modifier
                     .fillMaxSize()
                     .wrapContentSize(Alignment.Center), navController)
             }
 
-            composable(route = "Screen4") { //para ti
-                CenterAlignedTopAppBar2(navController)
+            composable(route = "Registro") { //para ti
+                Registro(innerPadding, navController)
             }*/
 
             composable(route = "Perfil") {

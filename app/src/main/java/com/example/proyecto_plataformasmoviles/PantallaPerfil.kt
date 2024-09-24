@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.proyecto_plataformasmoviles.ui.theme.Proyecto_plataformasMovilesTheme
+import com.example.proyecto_plataformasmoviles.ui.theme.cocoFontFamily
 
 class PantallaPerfil : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +77,8 @@ fun CenterAlignedTopAppBar_Perfil(navController: NavHostController) {
                 title = {
                     Text(
                         text = stringResource(R.string.Perfil),
+                        fontFamily = cocoFontFamily,
+                        fontWeight = FontWeight.Bold,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -97,7 +101,7 @@ fun CenterAlignedTopAppBar_Perfil(navController: NavHostController) {
 
 @Composable
 fun Perfil(innerPadding: PaddingValues) {
-    Surface(color = Color(0xFFFFE1F3)){
+    Surface(color = Color(0xFFECCCE2)){
         Column(modifier = Modifier.fillMaxSize()){
             Row(modifier = Modifier.offset(x = 40.dp, y = 80.dp)){
                 Icon(
@@ -108,7 +112,9 @@ fun Perfil(innerPadding: PaddingValues) {
                 )
 
                 Text(text = stringResource(R.string.Nombre),
-                    modifier = Modifier.offset(x = 10.dp, y = 5.dp),
+                    fontFamily = cocoFontFamily,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.offset(x = 10.dp, y = 8.dp),
                     fontSize = 23.sp)
             }
 
@@ -166,8 +172,10 @@ fun Perfil(innerPadding: PaddingValues) {
 
             Text(text = stringResource(R.string.Descripcion),
                 fontSize = 15.sp,
+                fontFamily = cocoFontFamily,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier
-                    .offset(x = 13.dp, y = 130.dp)
+                    .offset(x = 0.dp, y = 120.dp)
                     .padding(50.dp, 0.dp))
     }
 
