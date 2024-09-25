@@ -218,6 +218,16 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
                 .offset(x = 95.dp, y = 570.dp)
                 .padding(50.dp, 0.dp))
 
+        Button(onClick = { navController.navigate("Perfil") },
+            colors = ButtonColors(Color(0xFFbb4491), Color(0xFFFFFFFF), Color(0xFFbb4491), Color(0xFFbb4491)),
+            modifier = Modifier
+                .offset(x = 75.dp, 630.dp)
+                .size(250.dp, 60.dp)) {
+            Text(text = stringResource(R.string.Next),
+                fontSize = 35.sp,
+                fontFamily = cocoFontFamily,
+                fontWeight = FontWeight.Bold)
+        }
     }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -240,7 +250,8 @@ fun CustomDropdownMenu() {
             expanded = isExpanded,
             onExpandedChange = {isExpanded =! isExpanded}) {
             TextField(
-                modifier = Modifier.menuAnchor()
+                modifier = Modifier
+                    .menuAnchor()
                     .fillMaxWidth()
                     .fillMaxHeight(),
                 value = selectedText,

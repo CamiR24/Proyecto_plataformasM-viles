@@ -103,7 +103,7 @@ fun CenterAlignedTopAppBar_Perfil(navController: NavHostController) {
 fun Perfil(innerPadding: PaddingValues) {
     Surface(color = Color(0xFFECCCE2)){
         Column(modifier = Modifier.fillMaxSize()){
-            Row(modifier = Modifier.offset(x = 40.dp, y = 80.dp)){
+            Row(modifier = Modifier.offset(x = 40.dp, y = 120.dp)){
                 Icon(
                     imageVector = Icons.Outlined.AccountCircle,
                     contentDescription = "Localized description",
@@ -124,10 +124,10 @@ fun Perfil(innerPadding: PaddingValues) {
                 modifier = Modifier
                     .size(380.dp)
                     .wrapContentSize()
-                    .offset(x = 4.dp, y = 100.dp)
+                    .offset(x = 4.dp, y = 140.dp)
             )
 
-            Row(modifier = Modifier.offset(x = 40.dp, y = 15.dp)){
+            Row(modifier = Modifier.offset(x = 40.dp, y = 55.dp)){
                 Image(
                     painter = painterResource(R.drawable.like), //usa imagen importada
                     contentDescription = null,
@@ -158,7 +158,7 @@ fun Perfil(innerPadding: PaddingValues) {
 
             }
 
-            Row(modifier = Modifier.offset(x = 40.dp, y = 117.dp)){
+            Row(modifier = Modifier.offset(x = 40.dp, y = 157.dp)){
                 Image(painter = painterResource(R.drawable.like),
                     contentDescription = null,
                     modifier = Modifier
@@ -175,7 +175,7 @@ fun Perfil(innerPadding: PaddingValues) {
                 fontFamily = cocoFontFamily,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
-                    .offset(x = 0.dp, y = 120.dp)
+                    .offset(x = 0.dp, y = 160.dp)
                     .padding(50.dp, 0.dp))
     }
 

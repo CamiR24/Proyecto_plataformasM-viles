@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Proyecto_plataformasMoviles"
         tools:targetApi="31">
         <activity
-            android:name=".PantallaRegistro"
+            android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Proyecto_plataformasMoviles">
