@@ -14,14 +14,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -92,6 +104,52 @@ fun CenterAlignedTopAppBar_Perfil(navController: NavHostController) {
                     }
                 },
                 scrollBehavior = scrollBehavior,
+            )
+        },
+    ) { innerPadding ->
+        Perfil(innerPadding)
+    }
+}
+
+@Composable
+fun BottomAppBarPerfil() {
+    Scaffold(
+        bottomBar = {
+            BottomAppBar(
+                actions = {
+                    IconButton(onClick = { /* do something */ },
+                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
+                        modifier = Modifier
+                            .offset(x=30.dp,y=0.dp)) {
+                        Icon(Icons.Filled.CheckCircle, contentDescription = "Localized description")
+                    }
+                    IconButton(onClick = { /* do something */ },
+                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
+                        modifier = Modifier.offset(x=70.dp,y=0.dp)) {
+                        Icon(
+                            Icons.Filled.Person,
+                            contentDescription = "Localized description",
+                        )
+                    }
+                    IconButton(onClick = { /* do something */ },
+                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
+                        modifier = Modifier.offset(x=120.dp,y=0.dp)) {
+                        Icon(
+                            Icons.Filled.Email,
+                            contentDescription = "Localized description",
+                        )
+                    }
+                    IconButton(onClick = { /* do something */ },
+                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
+                        modifier = Modifier.offset(x=160.dp,y=0.dp)) {
+                        Icon(
+                            Icons.Filled.Favorite,
+                            contentDescription = "Localized description",
+                        )
+                    }
+                },
+                containerColor = Color(0xFFbb4491),
+                modifier = Modifier.size(500.dp, 65.dp)
             )
         },
     ) { innerPadding ->
@@ -192,5 +250,6 @@ fun PerfilPreview() {
     Proyecto_plataformasMovilesTheme {
         Perfil(innerPadding= PaddingValues())
         CenterAlignedTopAppBar_Perfil(navController = navController)
+        BottomAppBarPerfil()
     }
 }
