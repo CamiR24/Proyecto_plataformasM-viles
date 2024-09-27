@@ -107,12 +107,12 @@ fun CenterAlignedTopAppBar_Perfil(navController: NavHostController) {
             )
         },
     ) { innerPadding ->
-        Perfil(innerPadding)
+        BottomAppBarPerfil(innerPadding)
     }
 }
 
 @Composable
-fun BottomAppBarPerfil() {
+fun BottomAppBarPerfil(innerPadding: PaddingValues) {
     Scaffold(
         bottomBar = {
             BottomAppBar(
@@ -120,12 +120,12 @@ fun BottomAppBarPerfil() {
                     IconButton(onClick = { /* do something */ },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
                         modifier = Modifier
-                            .offset(x=30.dp,y=0.dp)) {
+                            .offset(x=30.dp,y=10.dp)) {
                         Icon(Icons.Filled.CheckCircle, contentDescription = "Localized description")
                     }
                     IconButton(onClick = { /* do something */ },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
-                        modifier = Modifier.offset(x=70.dp,y=0.dp)) {
+                        modifier = Modifier.offset(x=70.dp,y=10.dp)) {
                         Icon(
                             Icons.Filled.Person,
                             contentDescription = "Localized description",
@@ -133,7 +133,7 @@ fun BottomAppBarPerfil() {
                     }
                     IconButton(onClick = { /* do something */ },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
-                        modifier = Modifier.offset(x=120.dp,y=0.dp)) {
+                        modifier = Modifier.offset(x=120.dp,y=10.dp)) {
                         Icon(
                             Icons.Filled.Email,
                             contentDescription = "Localized description",
@@ -141,15 +141,14 @@ fun BottomAppBarPerfil() {
                     }
                     IconButton(onClick = { /* do something */ },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
-                        modifier = Modifier.offset(x=160.dp,y=0.dp)) {
+                        modifier = Modifier.offset(x=160.dp,y=10.dp)) {
                         Icon(
                             Icons.Filled.Favorite,
                             contentDescription = "Localized description",
                         )
                     }
                 },
-                containerColor = Color(0xFFbb4491),
-                modifier = Modifier.size(500.dp, 65.dp)
+                containerColor = Color(0xFFbb4491)
             )
         },
     ) { innerPadding ->
@@ -250,6 +249,6 @@ fun PerfilPreview() {
     Proyecto_plataformasMovilesTheme {
         Perfil(innerPadding= PaddingValues())
         CenterAlignedTopAppBar_Perfil(navController = navController)
-        BottomAppBarPerfil()
+        BottomAppBarPerfil(innerPadding = PaddingValues())
     }
 }
