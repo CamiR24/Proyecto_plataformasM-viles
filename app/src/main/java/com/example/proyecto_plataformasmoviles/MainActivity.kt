@@ -82,6 +82,10 @@ fun App(
                 CenterAlignedTopAppBar_Perfil(navController)
             }
 
+            composable(route = "Recomendaciones") {
+                RecomendacionesScreen(innerPadding, navController)
+            }
+
             /*composable(route = "Screen4") { //chat
                 CenterAlignedTopAppBar2(navController)
             }
