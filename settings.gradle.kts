@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Proyecto_plataformasMoviles"
 include(":app")
- 
+include(":app")
