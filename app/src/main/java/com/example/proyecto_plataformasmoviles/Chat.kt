@@ -19,7 +19,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.proyecto_plataformasmoviles.ui.theme.cocoFontFamily
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -52,7 +51,6 @@ fun ChatScreen() {
             text = "Leah",
             color = Color(0xFFbb4491),
             fontSize = 32.sp,
-            fontFamily = cocoFontFamily,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
