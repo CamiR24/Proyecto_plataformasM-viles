@@ -69,7 +69,6 @@ class PantallaNotificaciones : ComponentActivity() {
 @Composable
 fun CenterAlignedTopAppBar_Notificaciones(navController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
 
