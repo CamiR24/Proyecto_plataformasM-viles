@@ -10,6 +10,10 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import com.example.proyecto_plataformasmoviles.R
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -31,6 +35,21 @@ private val LightColorScheme = lightColorScheme(
     onBackground = Color(0xFF1C1B1F),
     onSurface = Color(0xFF1C1B1F),
     */
+)
+
+val cocoFontFamily = FontFamily(
+    Font(R.font.cocogothicfattrial, FontWeight.ExtraBold),
+    Font(R.font.cocogothicboldtrial, FontWeight.Bold),
+    Font(R.font.cocogothicultralighttrial, FontWeight.ExtraLight),
+    Font(R.font.cocogothicultralightitalictrial, FontWeight.ExtraLight),
+    Font(R.font.cocogothiclighttrial, FontWeight.Light),
+    Font(R.font.cocogothiclightitalictrial, FontWeight.Light),
+    Font(R.font.cocogothicitalictrial, FontWeight.Normal),
+    Font(R.font.cocogothicheavytrial, FontWeight.Bold),
+    Font(R.font.cocogothicheavyitalictrial, FontWeight.Bold),
+    Font(R.font.cocogothicfatitalictrial, FontWeight.ExtraBold),
+    Font(R.font.cocogothicbolditalictrial, FontWeight.Bold),
+    Font(R.font.cocogothictrial, FontWeight.Normal)
 )
 
 @Composable
