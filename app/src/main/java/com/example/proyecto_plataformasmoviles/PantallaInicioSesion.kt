@@ -86,7 +86,8 @@ class PantallaInicioSesion : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Proyecto_plataformasMovilesTheme {
-                InicioSesion()
+                val navController = rememberNavController()
+                InicioSesion(navController = navController)
             }
         }
     }
@@ -94,7 +95,7 @@ class PantallaInicioSesion : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InicioSesion( modifier: Modifier = Modifier) {
+fun InicioSesion( navController: NavController, modifier: Modifier = Modifier) {
     // Variables
     val logonb = painterResource(R.drawable.logo_nobg)
     val fucsia = Color(0xFFbb4491)
@@ -322,7 +323,7 @@ fun InicioSesion( modifier: Modifier = Modifier) {
                         append("Regístrate Aquí")
                     },
                     onClick = {
-                        // A pantalla REGISTRO
+                        navController.navigate("Registro")
                     },
                     modifier = Modifier
                         .paddingFromBaseline(top = 19.dp)
@@ -339,7 +340,7 @@ fun InicioSesion( modifier: Modifier = Modifier) {
 
             // Botón "Entrar"
             FilledTonalButton(
-                onClick = {Toast.makeText(context, "ENTRAR!", Toast.LENGTH_SHORT).show()}, //A Pantalla principal
+                onClick = {navController.navigate("Perfil")}, //A Pantalla principal
                 colors = ButtonDefaults.buttonColors(containerColor = fucsia), // Color fucsia
                 modifier = Modifier
                     .paddingFromBaseline(top = 370.dp)
@@ -361,6 +362,7 @@ fun InicioSesion( modifier: Modifier = Modifier) {
 @Composable
 fun InicioSesionPreview() {
     Proyecto_plataformasMovilesTheme {
-        InicioSesion()
+        val navController = rememberNavController()
+        InicioSesion(navController = navController)
     }
 }

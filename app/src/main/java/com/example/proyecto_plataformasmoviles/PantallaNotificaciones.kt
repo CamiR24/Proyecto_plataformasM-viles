@@ -60,7 +60,8 @@ class PantallaNotificaciones : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-           BottomAppBarNotificaciones(innerPadding = PaddingValues())
+            val navControler = rememberNavController()
+           BottomAppBarNotificaciones(navController = navControler, innerPadding = PaddingValues())
         }
     }
 }
@@ -100,23 +101,23 @@ fun CenterAlignedTopAppBar_Notificaciones(navController: NavHostController) {
             )
         },
     ) { innerPadding ->
-        BottomAppBarNotificaciones(innerPadding)
+        BottomAppBarNotificaciones(innerPadding, navController)
     }
 }
 
 @Composable
-fun BottomAppBarNotificaciones(innerPadding: PaddingValues) {
+fun BottomAppBarNotificaciones(innerPadding: PaddingValues, navController: NavHostController) {
     Scaffold(
         bottomBar = {
             BottomAppBar(
                 actions = {
-                    IconButton(onClick = { /* do something */ },
+                    IconButton(onClick = { navController.navigate("Notificaciones") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
                         modifier = Modifier
                             .offset(x=30.dp,y=10.dp)) {
                         Icon(Icons.Filled.CheckCircle, contentDescription = "Localized description")
                     }
-                    IconButton(onClick = { /* do something */ },
+                    IconButton(onClick = { navController.navigate("Perfil") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
                         modifier = Modifier.offset(x=70.dp,y=10.dp)) {
                         Icon(
@@ -124,7 +125,7 @@ fun BottomAppBarNotificaciones(innerPadding: PaddingValues) {
                             contentDescription = "Localized description",
                         )
                     }
-                    IconButton(onClick = { /* do something */ },
+                    IconButton(onClick = { navController.navigate("Chat") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
                         modifier = Modifier.offset(x=120.dp,y=10.dp)) {
                         Icon(
@@ -132,7 +133,7 @@ fun BottomAppBarNotificaciones(innerPadding: PaddingValues) {
                             contentDescription = "Localized description",
                         )
                     }
-                    IconButton(onClick = { /* do something */ },
+                    IconButton(onClick = { navController.navigate("Recomendaciones") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
                         modifier = Modifier.offset(x=160.dp,y=10.dp)) {
                         Icon(
@@ -367,7 +368,7 @@ fun NotificacionesPreview() {
 
     Proyecto_plataformasMovilesTheme {
         Notificaciones(innerPadding = PaddingValues())
-        BottomAppBarNotificaciones(innerPadding = PaddingValues())
+        BottomAppBarNotificaciones(navController = navController, innerPadding = PaddingValues())
         CenterAlignedTopAppBar_Notificaciones(navController = navController)
     }
 }

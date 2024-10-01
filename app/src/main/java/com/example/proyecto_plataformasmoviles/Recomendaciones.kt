@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -121,13 +122,13 @@ fun RecomendacionesScreen(innerPadding: PaddingValues, navController: NavHostCon
         bottomBar = {
             BottomAppBar(
                 actions = {
-                    IconButton(onClick = { /* do something */ },
+                    IconButton(onClick = { navController.navigate("Notificaciones") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
                         modifier = Modifier
                             .offset(x=30.dp,y=10.dp)) {
                         Icon(Icons.Filled.CheckCircle, contentDescription = "Localized description")
                     }
-                    IconButton(onClick = { /* do something */ },
+                    IconButton(onClick = { navController.navigate("Perfil") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
                         modifier = Modifier.offset(x=70.dp,y=10.dp)) {
                         Icon(
@@ -135,7 +136,7 @@ fun RecomendacionesScreen(innerPadding: PaddingValues, navController: NavHostCon
                             contentDescription = "Localized description",
                         )
                     }
-                    IconButton(onClick = { /* do something */ },
+                    IconButton(onClick = { navController.navigate("Chat") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
                         modifier = Modifier.offset(x=120.dp,y=10.dp)) {
                         Icon(
@@ -143,7 +144,7 @@ fun RecomendacionesScreen(innerPadding: PaddingValues, navController: NavHostCon
                             contentDescription = "Localized description",
                         )
                     }
-                    IconButton(onClick = { /* do something */ },
+                    IconButton(onClick = { navController.navigate("Recomendaciones") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
                         modifier = Modifier.offset(x=160.dp,y=10.dp)) {
                         Icon(
@@ -156,12 +157,12 @@ fun RecomendacionesScreen(innerPadding: PaddingValues, navController: NavHostCon
             )
         },
     ) { innerPadding ->
-        Recomendaciones(innerPadding = innerPadding)
+        Recomendaciones(navController = navController, innerPadding = innerPadding)
     }
 }
 
 @Composable
-fun Recomendaciones(innerPadding: PaddingValues) {
+fun Recomendaciones(navController: NavHostController, innerPadding: PaddingValues) {
     Surface(
         modifier = Modifier
             .padding(innerPadding)
@@ -184,10 +185,10 @@ fun Recomendaciones(innerPadding: PaddingValues) {
             )
             LazyColumn {
                 item {
-                    FilaRecomendacion()
-                    FilaRecomendacion()
-                    FilaRecomendacion()
-                    FilaRecomendacion()
+                    FilaRecomendacion(navController)
+                    FilaRecomendacion(navController)
+                    FilaRecomendacion(navController)
+                    FilaRecomendacion(navController)
                 }
             }
         }
@@ -195,7 +196,7 @@ fun Recomendaciones(innerPadding: PaddingValues) {
 }
 
 @Composable
-fun FilaRecomendacion() {
+fun FilaRecomendacion(navController: NavHostController) {
     Surface (
         color = Color(0xFFF1E2EC),
         modifier = Modifier
@@ -215,10 +216,10 @@ fun FilaRecomendacion() {
                     .fillMaxWidth()
             ){
                 item {
-                    PerfilRecomendado()
-                    PerfilRecomendado()
-                    PerfilRecomendado()
-                    PerfilRecomendado()
+                    PerfilRecomendado(navController)
+                    PerfilRecomendado(navController)
+                    PerfilRecomendado(navController)
+                    PerfilRecomendado(navController)
                 }
             }
         }
@@ -226,7 +227,7 @@ fun FilaRecomendacion() {
 }
 
 @Composable
-fun PerfilRecomendado() {
+fun PerfilRecomendado(navController: NavHostController) {
     Card(
         modifier = Modifier
             .padding(10.dp)
@@ -284,6 +285,8 @@ fun PerfilRecomendado() {
                         modifier = Modifier
                             .padding(vertical = 5.dp, horizontal = 10.dp)
                             .align(Alignment.CenterEnd)
+                            .clickable { navController.navigate("Match") }
+
                     )
                 }
             }

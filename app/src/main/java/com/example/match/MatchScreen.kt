@@ -27,18 +27,21 @@ import androidx.compose.ui.unit.sp
 import com.example.proyecto_plataformasmoviles.R
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            DogMatchScreen()
+            val navController = rememberNavController()
+            DogMatchScreen(navController = navController)
         }
     }
 }
 
 @Composable
-fun DogMatchScreen() {
+fun DogMatchScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -52,7 +55,7 @@ fun DogMatchScreen() {
         ) {
             LeahProfileSection()
             MatchSection()
-            NextButtonAndClouds()
+            NextButtonAndClouds(navController)
         }
     }
 }
@@ -156,12 +159,12 @@ fun CircularProfile(name: String, imageRes: Int) {
 }
 
 @Composable
-fun NextButtonAndClouds() {
+fun NextButtonAndClouds(navController: NavController) {
     Box(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.align(Alignment.BottomCenter)) {
             //"Siguiente"
             Button(
-                onClick = { /* a noti o a chat */ },
+                onClick = { navController.navigate("Perfil") },
                 colors = ButtonDefaults.buttonColors(colorResource(id = R.color.petPurple)),
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -203,5 +206,6 @@ fun NextButtonAndClouds() {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    DogMatchScreen()
+    val navController = rememberNavController()
+    DogMatchScreen(navController = navController)
 }
