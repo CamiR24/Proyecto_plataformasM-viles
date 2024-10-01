@@ -15,14 +15,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.match.ui.theme.MatchTheme
 import com.example.proyecto_plataformasmoviles.R
+
+//Puntos a trabajar:
+//El espacio entre MATCH! y el boton de siguiente debe ser menor y deben estar relativamente cera
+//Los nombres de ambos perros deben de estar arriba de las imagenes redondeadas de perfil curbadas como un arcoiris
+//El Texto de "Yorki: Milo, Pug: Lucas y Beagle: Tommy... también revisaron tu perfil" debe estar más abajo casi tocando el fondo de la pantalla con el fondo blancod e las nubes para que contraste bien con el color negro de su texto
+
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,13 +54,11 @@ fun DogMatchScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(0.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             LeahProfileSection()
-
             MatchSection()
-
             NextButtonAndClouds()
         }
     }
@@ -62,45 +71,65 @@ fun LeahProfileSection() {
         modifier = Modifier
             .padding(top = 16.dp)
     ) {
-        // Foto de perfil circular
         Image(
             painter = painterResource(id = R.drawable.leahpfp),
             contentDescription = "Leah's Profile Picture",
             modifier = Modifier
-                .size(64.dp)
+                .size(40.dp)
                 .clip(CircleShape)
                 .background(Color(0xFFb8a0e8))
         )
         Spacer(modifier = Modifier.width(8.dp))
-        // Nombre de Leah
         Text(
             text = "Leah",
-            fontSize = 24.sp,
-            color = Color.White
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
         )
     }
 }
 
 @Composable
 fun MatchSection() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth()
     ) {
-        //Leah
-        CircularProfile("Leah, Westie", R.drawable.leahpfp)
-
-        Text(
-            text = "MATCH!",
-            fontSize = 36.sp,
+        Row(
             modifier = Modifier
-                .background(Color.White, shape = RoundedCornerShape(8.dp))
-                .padding(16.dp)
-        )
+                .fillMaxWidth()
+                .padding(horizontal = 30.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CircularProfile("Leah, Westie", R.drawable.leahpfp)
+            CircularProfile("Oliverio, Westie", R.drawable.oliveropfp)
+        }
 
-        //Oliverio
-        CircularProfile("Oliverio, Westie", R.drawable.oliveropfp)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Box(modifier = Modifier.padding(top = 18.dp)) { //Distancia entre dos circulos y MATCH {
+            Text(
+                text = "MATCH!",
+                fontSize = 66.sp,
+                fontWeight = FontWeight.Bold,
+                fontStyle = FontStyle.Italic,
+                modifier = Modifier
+                    .offset(x = 6.dp, y = 6.dp) // Adjust shadow position
+                    .background(Color.Black, shape = RoundedCornerShape(12.dp))
+                    .padding(10.dp)
+            )
+
+            Text(
+                text = "MATCH!",
+                fontSize = 66.sp,
+                fontWeight = FontWeight.Bold,
+                fontStyle = FontStyle.Italic,
+                modifier = Modifier
+                    .background(Color.White, shape = RoundedCornerShape(12.dp))
+                    .padding(10.dp)
+            )
+        }
     }
 }
 
@@ -109,54 +138,65 @@ fun CircularProfile(name: String, imageRes: Int) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        //img circular
         Image(
             painter = painterResource(id = imageRes),
             contentDescription = null,
             modifier = Modifier
-                .size(100.dp)
+                .size(150.dp)
                 .clip(CircleShape)
                 .background(colorResource(id = R.color.circlePurple))
         )
         Spacer(modifier = Modifier.height(8.dp))
-        //intento de nombre curvado
         Text(
             text = name,
             fontSize = 16.sp,
-            color = Color.White
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
         )
     }
 }
 
 @Composable
 fun NextButtonAndClouds() {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        //boton a siguiente nav
-        Button(
-            onClick = { /* pam pam a noti o chat? */ },
-            colors = ButtonDefaults.buttonColors(colorResource(id = R.color.petPurple))
-        ) {
-            Text(text = "Siguiente", color = Color.White)
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.align(Alignment.BottomCenter)) {
+            //"Siguiente"
+            Button(
+                onClick = { /* a noti o chat */ },
+                colors = ButtonDefaults.buttonColors(colorResource(id = R.color.petPurple)),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .fillMaxWidth(0.7f)
+                    .clip(RoundedCornerShape(16.dp))
+            ) {
+                Text(
+                    text = "Siguiente",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 32.sp
+                )
+            }
+
+            Spacer(modifier = Modifier.height(0.dp))
+
+            Image(
+                painter = painterResource(id = R.drawable.clouds),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp), //altura nubes
+                contentScale = ContentScale.Crop
+            )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        //revisiones de perfil
         Text(
             text = "Yorki: Milo, Pug: Lucas y Beagle: Tommy... también revisaron tu perfil",
-            fontSize = 14.sp,
-            color = Color.White,
-            modifier = Modifier.padding(8.dp)
-        )
-
-        //Nubes de abajo
-        Image(
-            painter = painterResource(id = R.drawable.clouds),
-            contentDescription = null,
-            modifier = Modifier.fillMaxWidth()
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black,
+            modifier = Modifier
+                .padding(bottom = 0.dp)
+                .align(Alignment.Center)
         )
     }
 }
