@@ -116,7 +116,7 @@ fun ChatScreen() {
                 keyboardController?.hide()
             }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.send),
+                    painter = painterResource(id = R.drawable.send_chat),
                     contentDescription = "Enviar mensaje",
                     tint = Color(0xFF4A90E2)
                 )
