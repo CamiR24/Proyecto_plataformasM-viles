@@ -97,7 +97,7 @@ fun RecomendacionesScreen(innerPadding: PaddingValues, navController: NavHostCon
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = Color(0xFFbb4491),
                     titleContentColor = Color.White,
-                    actionIconContentColor = Color(0xFF54398C)
+                    actionIconContentColor = Color(0xFFFFFFFF)
                 ),
                 title = {
                     Text(
@@ -109,7 +109,8 @@ fun RecomendacionesScreen(innerPadding: PaddingValues, navController: NavHostCon
                     )
                 },
                 actions = {
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(onClick = { navController.navigate("Ajustes") },
+                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFFFFFFFF), Color(0xFF54398c), Color(0xFF54398c))) {
                         Icon(
                             imageVector = Icons.Outlined.Settings,
                             contentDescription = "Localized description"

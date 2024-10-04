@@ -76,9 +76,9 @@ fun CenterAlignedTopAppBar_Notificaciones(navController: NavHostController) {
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.onPrimary,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface,
-                    actionIconContentColor = MaterialTheme.colorScheme.primary
+                    containerColor = Color(0xFFbb4491),
+                    titleContentColor = Color.White,
+                    actionIconContentColor = Color(0xFF54398C)
                 ),
                 title = {
                     Text(
@@ -90,7 +90,8 @@ fun CenterAlignedTopAppBar_Notificaciones(navController: NavHostController) {
                     )
                 },
                 actions = {
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(onClick = { navController.navigate("Ajustes") },
+                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFFFFFFFF), Color(0xFF54398c), Color(0xFF54398c))) {
                         Icon(
                             imageVector = Icons.Outlined.Settings,
                             contentDescription = "Localized description"
