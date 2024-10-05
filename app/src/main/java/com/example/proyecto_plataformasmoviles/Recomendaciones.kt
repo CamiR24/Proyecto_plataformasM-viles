@@ -32,6 +32,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.Favorite
@@ -126,12 +127,13 @@ fun RecomendacionesScreen(innerPadding: PaddingValues, navController: NavHostCon
                     IconButton(onClick = { navController.navigate("Notificaciones") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
                         modifier = Modifier
-                            .offset(x=30.dp,y=10.dp)) {
+                            .offset(x=25.dp,y=10.dp)) {
                         Icon(Icons.Filled.CheckCircle, contentDescription = "Localized description")
                     }
                     IconButton(onClick = { navController.navigate("Perfil") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
-                        modifier = Modifier.offset(x=70.dp,y=10.dp)) {
+                        modifier = Modifier
+                            .offset(x=50.dp,y=10.dp)) {
                         Icon(
                             Icons.Filled.Person,
                             contentDescription = "Localized description",
@@ -139,7 +141,7 @@ fun RecomendacionesScreen(innerPadding: PaddingValues, navController: NavHostCon
                     }
                     IconButton(onClick = { navController.navigate("Chat") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
-                        modifier = Modifier.offset(x=120.dp,y=10.dp)) {
+                        modifier = Modifier.offset(x=75.dp,y=10.dp)) {
                         Icon(
                             Icons.Filled.Email,
                             contentDescription = "Localized description",
@@ -147,11 +149,17 @@ fun RecomendacionesScreen(innerPadding: PaddingValues, navController: NavHostCon
                     }
                     IconButton(onClick = { navController.navigate("Recomendaciones") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
-                        modifier = Modifier.offset(x=160.dp,y=10.dp)) {
+                        modifier = Modifier.offset(x=100.dp,y=10.dp)) {
                         Icon(
                             Icons.Filled.Favorite,
                             contentDescription = "Localized description",
                         )
+                    }
+                    IconButton(onClick = { navController.navigate("TusMatches") },
+                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
+                        modifier = Modifier
+                            .offset(x=125.dp,y=10.dp)) {
+                        Icon(Icons.Filled.Star, contentDescription = "Localized description")
                     }
                 },
                 containerColor = Color(0xFFbb4491)

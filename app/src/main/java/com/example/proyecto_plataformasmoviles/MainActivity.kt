@@ -84,8 +84,12 @@ fun App(
                 DogMatchScreen(navController)
             }
 
-            composable(route = "Ajustes") { //visualización de los matches
+            composable(route = "Ajustes") {
                 CenterAlignedTopAppBar_Ajustes(navController)
+            }
+
+            composable(route = "TusMatches") { //visualización de los matches
+                MostrarMatchesScreen(innerPadding, navController)
             }
         }
     }
