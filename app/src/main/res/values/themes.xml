@@ -2,4 +2,6 @@
 <resources>
 
     <style name="Theme.Proyecto_plataformasMoviles" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.Match" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>
