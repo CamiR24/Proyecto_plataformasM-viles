@@ -22,6 +22,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.match.DogMatchScreen
 import com.example.proyecto_plataformasmoviles.ui.theme.Proyecto_plataformasMovilesTheme
 
 class MainActivity : ComponentActivity() {
@@ -52,47 +53,44 @@ fun App(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "Registro",
+            startDestination = "InicioSesion",
             modifier = modifier.padding(innerPadding)
         ) {
-            /*composable(route = "Screen1") { //inicio de sesión
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Screen1(
-                        innerPadding = PaddingValues(),
-                        navController
-                    )
-                }
-            }*/
+            composable(route = "InicioSesion") { //inicio de sesión
+                InicioSesion(navController)
+            }
 
             composable(route = "Registro") { //registro
                 Registro(innerPadding, navController)
             }
 
-            /*composable(route = "Screen3") { //notificaciones
-                ThirdActivity(modifier = Modifier
-                    .fillMaxSize()
-                    .wrapContentSize(Alignment.Center), navController)
+            composable(route = "Notificaciones") { //notificaciones
+               CenterAlignedTopAppBar_Notificaciones(navController)
             }
-
-            composable(route = "Registro") { //para ti
-                Registro(innerPadding, navController)
-            }*/
 
             composable(route = "Perfil") {
                 CenterAlignedTopAppBar_Perfil(navController)
             }
 
-            /*composable(route = "Screen4") { //chat
-                CenterAlignedTopAppBar2(navController)
+            composable(route = "Recomendaciones") {
+                RecomendacionesScreen(innerPadding, navController)
             }
 
-            composable(route = "Screen4") { //match
-                CenterAlignedTopAppBar2(navController)
+            composable(route = "Chat") { //chat
+                ChatScreen(navController)
             }
 
-            composable(route = "Screen4") { //visualización de los matches
-                CenterAlignedTopAppBar2(navController)
-            }*/
+            composable(route = "Match") { //match
+                DogMatchScreen(navController)
+            }
+
+            composable(route = "Ajustes") {
+                CenterAlignedTopAppBar_Ajustes(navController)
+            }
+
+            composable(route = "TusMatches") { //visualización de los matches
+                MostrarMatchesScreen(innerPadding, navController)
+            }
         }
     }
 }

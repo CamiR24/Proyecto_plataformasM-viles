@@ -1,14 +1,20 @@
 package com.example.proyecto_plataformasmoviles
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -21,9 +27,15 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Call
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
@@ -38,10 +50,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -94,8 +108,8 @@ fun CenterAlignedTopAppBar_Perfil(navController: NavHostController) {
                     )
                 },
                 actions = {
-                    IconButton(onClick = { /* do something */ },
-                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),) {
+                    IconButton(onClick = { navController.navigate("Ajustes") },
+                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFFFFFFFF), Color(0xFF54398c), Color(0xFF54398c)),) {
                         Icon(
                             imageVector = Icons.Outlined.Settings,
                             contentDescription = "Localized description"
@@ -106,45 +120,52 @@ fun CenterAlignedTopAppBar_Perfil(navController: NavHostController) {
             )
         },
     ) { innerPadding ->
-        BottomAppBarPerfil(innerPadding)
+        BottomAppBarPerfil(innerPadding, navController)
     }
 }
 
 @Composable
-fun BottomAppBarPerfil(innerPadding: PaddingValues) {
+fun BottomAppBarPerfil(innerPadding: PaddingValues, navController: NavHostController) {
     Scaffold(
         bottomBar = {
             BottomAppBar(
                 actions = {
-                    IconButton(onClick = { /* do something */ },
+                    IconButton(onClick = { navController.navigate("Notificaciones") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
                         modifier = Modifier
-                            .offset(x=30.dp,y=10.dp)) {
+                            .offset(x=25.dp,y=10.dp)) {
                         Icon(Icons.Filled.CheckCircle, contentDescription = "Localized description")
                     }
-                    IconButton(onClick = { /* do something */ },
+                    IconButton(onClick = { navController.navigate("Perfil") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
-                        modifier = Modifier.offset(x=70.dp,y=10.dp)) {
+                        modifier = Modifier
+                            .offset(x=50.dp,y=10.dp)) {
                         Icon(
                             Icons.Filled.Person,
                             contentDescription = "Localized description",
                         )
                     }
-                    IconButton(onClick = { /* do something */ },
+                    IconButton(onClick = { navController.navigate("Chat") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
-                        modifier = Modifier.offset(x=120.dp,y=10.dp)) {
+                        modifier = Modifier.offset(x=75.dp,y=10.dp)) {
                         Icon(
                             Icons.Filled.Email,
                             contentDescription = "Localized description",
                         )
                     }
-                    IconButton(onClick = { /* do something */ },
+                    IconButton(onClick = { navController.navigate("Recomendaciones") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
-                        modifier = Modifier.offset(x=160.dp,y=10.dp)) {
+                        modifier = Modifier.offset(x=100.dp,y=10.dp)) {
                         Icon(
                             Icons.Filled.Favorite,
                             contentDescription = "Localized description",
                         )
+                    }
+                    IconButton(onClick = { navController.navigate("TusMatches") },
+                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
+                        modifier = Modifier
+                            .offset(x=125.dp,y=10.dp)) {
+                        Icon(Icons.Filled.Star, contentDescription = "Localized description")
                     }
                 },
                 containerColor = Color(0xFFbb4491)
@@ -248,6 +269,6 @@ fun PerfilPreview() {
     Proyecto_plataformasMovilesTheme {
         Perfil(innerPadding= PaddingValues())
         CenterAlignedTopAppBar_Perfil(navController = navController)
-        BottomAppBarPerfil(innerPadding = PaddingValues())
+        BottomAppBarPerfil(navController = navController, innerPadding = PaddingValues())
     }
 }

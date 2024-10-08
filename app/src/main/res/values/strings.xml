@@ -14,6 +14,9 @@
     <string name="Ubicacion">Ubicación</string>
     <string name="Edad_del_perro">Edad del perro</string>
 
+    //string pantalla recomendaciones
+    <string name="Recomendaciones">RECOMENDACIONES</string>
+
     //Todo
     <string name="Next">Siguiente</string>
 
@@ -30,5 +33,8 @@
     <string name="success_registration">Successfully registered new user</string>
     <string name="success_login">Successfully logged in</string>
     <string name="error_unknown">An unknown error occurred</string>
+
+    //
+    <string name="TusMatches">TUS MATCHES</string>
     
 </resources>
