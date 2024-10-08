@@ -1,65 +1,39 @@
 package com.example.proyecto_plataformasmoviles
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.AccountBox
-import androidx.compose.material.icons.outlined.AccountCircle
-import androidx.compose.material.icons.outlined.Call
-import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonColors
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -71,16 +45,15 @@ import androidx.navigation.compose.rememberNavController
 import com.example.proyecto_plataformasmoviles.ui.theme.Proyecto_plataformasMovilesTheme
 import com.example.proyecto_plataformasmoviles.ui.theme.cocoFontFamily
 
-class PantallaPerfil : ComponentActivity() {
+class PantallaMostrarMatches : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             Proyecto_plataformasMovilesTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Perfil(
-                        innerPadding = PaddingValues())
-                }
+                val navController = rememberNavController()
+                val innerPadding = PaddingValues()
+                MostrarMatchesScreen(innerPadding, navController)
             }
         }
     }
@@ -88,19 +61,20 @@ class PantallaPerfil : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CenterAlignedTopAppBar_Perfil(navController: NavHostController) {
+fun MostrarMatchesScreen(innerPadding: PaddingValues, navController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-
         topBar = {
             CenterAlignedTopAppBar(
-                colors = TopAppBarColors(Color(0xFFbb4491), Color(0xFFbb4491), Color(0xFF54398c), Color(0xFFFFFFFF), Color(0xFF54398c)
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color(0xFFbb4491),
+                    titleContentColor = Color.White,
+                    actionIconContentColor = Color(0xFFFFFFFF)
                 ),
                 title = {
                     Text(
-                        text = stringResource(R.string.Perfil),
+                        text = stringResource(R.string.TusMatches),
                         fontFamily = cocoFontFamily,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
@@ -109,7 +83,7 @@ fun CenterAlignedTopAppBar_Perfil(navController: NavHostController) {
                 },
                 actions = {
                     IconButton(onClick = { navController.navigate("Ajustes") },
-                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFFFFFFFF), Color(0xFF54398c), Color(0xFF54398c)),) {
+                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFFFFFFFF), Color(0xFF54398c), Color(0xFF54398c))) {
                         Icon(
                             imageVector = Icons.Outlined.Settings,
                             contentDescription = "Localized description"
@@ -119,14 +93,6 @@ fun CenterAlignedTopAppBar_Perfil(navController: NavHostController) {
                 scrollBehavior = scrollBehavior,
             )
         },
-    ) { innerPadding ->
-        BottomAppBarPerfil(innerPadding, navController)
-    }
-}
-
-@Composable
-fun BottomAppBarPerfil(innerPadding: PaddingValues, navController: NavHostController) {
-    Scaffold(
         bottomBar = {
             BottomAppBar(
                 actions = {
@@ -172,103 +138,55 @@ fun BottomAppBarPerfil(innerPadding: PaddingValues, navController: NavHostContro
             )
         },
     ) { innerPadding ->
-        Perfil(innerPadding)
+        MostrarMatches(navController = navController, innerPadding = innerPadding)
     }
 }
 
 @Composable
-fun Perfil(innerPadding: PaddingValues) {
-    Surface(color = Color(0xFFECCCE2)){
-        Column(modifier = Modifier.fillMaxSize()){
-            Row(modifier = Modifier.offset(x = 40.dp, y = 120.dp)){
-                Icon(
-                    imageVector = Icons.Outlined.AccountCircle,
-                    contentDescription = "Localized description",
-                    modifier = Modifier
-                        .size(35.dp)
-                )
-
-                Text(text = stringResource(R.string.Nombre),
-                    fontFamily = cocoFontFamily,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.offset(x = 10.dp, y = 8.dp),
-                    fontSize = 23.sp)
-            }
-
-            Image(
-                painter = painterResource(R.drawable.leah), //usa imagen importada
-                contentDescription = null,
-                modifier = Modifier
-                    .size(380.dp)
-                    .wrapContentSize()
-                    .offset(x = 4.dp, y = 140.dp)
-            )
-
-            Row(modifier = Modifier.offset(x = 40.dp, y = 55.dp)){
-                Image(
-                    painter = painterResource(R.drawable.like), //usa imagen importada
-                    contentDescription = null,
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .offset(x = 15.dp, y = 100.dp))
-
-                Image(
-                    painter = painterResource(R.drawable.comentario), //usa imagen importada
-                    contentDescription = null,
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .offset(x = 15.dp, y = 100.dp))
-
-                Image(
-                    painter = painterResource(R.drawable.send), //usa imagen importada
-                    contentDescription = null,
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .offset(x = 10.dp, y = 100.dp))
-
-                Image(
-                    painter = painterResource(R.drawable.guardar), //usa imagen importada
-                    contentDescription = null,
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .offset(x = 135.dp, y = 100.dp))
-
-            }
-
-            Row(modifier = Modifier.offset(x = 40.dp, y = 157.dp)){
-                Image(painter = painterResource(R.drawable.like),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(25.dp)
-                        .offset(x = 20.dp, y = -5.dp))
-
-                Text(text = stringResource(R.string.Numero_likes),
-                    modifier = Modifier.offset(x = 22.dp, y = -5.dp),
-                    fontSize = 15.sp)
-            }
-
-            Text(text = stringResource(R.string.Descripcion),
-                fontSize = 15.sp,
+fun MostrarMatches(navController: NavHostController, innerPadding: PaddingValues) {
+    Surface(
+        modifier = Modifier
+            .padding(innerPadding)
+            .fillMaxSize(),
+        color = Color(0xFFECCCE2)
+    ){
+        Column (
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Text(
+                text = "Para Ti",
                 fontFamily = cocoFontFamily,
-                fontWeight = FontWeight.Bold,
                 modifier = Modifier
-                    .offset(x = 0.dp, y = 160.dp)
-                    .padding(50.dp, 0.dp))
+                    .align(Alignment.CenterHorizontally)
+                    .padding(10.dp),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFFBB4491),
+            )
+            LazyColumn (horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(0xFFF1E2EC))) {
+                item {
+                    PerfilRecomendado(navController)
+                    PerfilRecomendado(navController)
+                    PerfilRecomendado(navController)
+                    PerfilRecomendado(navController)
+                }
+            }
+        }
     }
-
-    }
-
 }
 
-@Preview(showBackground = true,
-    showSystemUi = true)
-@Composable
-fun PerfilPreview() {
-    val navController = rememberNavController()
 
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun MostrarMatchesPreview() {
     Proyecto_plataformasMovilesTheme {
-        Perfil(innerPadding= PaddingValues())
-        CenterAlignedTopAppBar_Perfil(navController = navController)
-        BottomAppBarPerfil(navController = navController, innerPadding = PaddingValues())
+        val navController = rememberNavController()
+        val innerPadding = PaddingValues()
+
+        MostrarMatchesScreen(innerPadding, navController)
     }
 }
