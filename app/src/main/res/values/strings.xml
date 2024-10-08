@@ -36,5 +36,13 @@
 
     //
     <string name="TusMatches">TUS MATCHES</string>
-    
+
+    //Matches!
+    <string name="LeahPFP">Leahs Profile Picture</string>
+    <string name="PerroPropio">Leah, Westie</string>
+    <string name="PerroOtro">Oliverio, Westie</string>
+    <string name="Match">Match!</string>
+    <string name="next">Siguiente</string>
+    <string name="Visitas">Yorki: Milo, Pug: Lucas y Beagle: Tommy... también revisaron tu perfil</string>
+
 </resources>

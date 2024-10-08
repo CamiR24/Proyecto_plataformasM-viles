@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_plataformasmoviles.R
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -68,7 +69,7 @@ fun LeahProfileSection() {
     ) {
         Image(
             painter = painterResource(id = R.drawable.leahpfp),
-            contentDescription = "Leah's Profile Picture",
+            contentDescription = stringResource(R.string.LeahPFP),
             modifier = Modifier
                 .size(40.dp)
                 .clip(CircleShape)
@@ -76,7 +77,7 @@ fun LeahProfileSection() {
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = "Leah",
+            text = stringResource(R.string.Nombre),
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black
@@ -97,15 +98,15 @@ fun MatchSection() {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            CircularProfile("Leah, Westie", R.drawable.leahpfp)
-            CircularProfile("Oliverio, Westie", R.drawable.oliveropfp)
+            CircularProfile(stringResource(R.string.PerroPropio), R.drawable.leahpfp)
+            CircularProfile(stringResource(R.string.PerroOtro), R.drawable.oliveropfp)
         }
 
         Spacer(modifier = Modifier.height(10.dp))
 
         Box(modifier = Modifier.padding(top = 6.dp)) {
             Text(
-                text = "MATCH!",
+                text = stringResource(R.string.Match),
                 fontSize = 72.sp,
                 fontWeight = FontWeight.Bold,
                 fontStyle = FontStyle.Italic,
@@ -116,7 +117,7 @@ fun MatchSection() {
             )
 
             Text(
-                text = "MATCH!",
+                text = stringResource(R.string.Match),
                 fontSize = 70.sp,
                 fontWeight = FontWeight.Bold,
                 fontStyle = FontStyle.Italic,
@@ -171,7 +172,7 @@ fun NextButtonAndClouds(navHostController: NavHostController) {
                     .clip(RoundedCornerShape(16.dp))
             ) {
                 Text(
-                    text = "Siguiente",
+                    text = stringResource(R.string.next),
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 38.sp
@@ -191,7 +192,7 @@ fun NextButtonAndClouds(navHostController: NavHostController) {
         }
 
         Text(
-            text = "Yorki: Milo, Pug: Lucas y Beagle: Tommy... también revisaron tu perfil",
+            text = stringResource(R.string.Visitas),
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black,
