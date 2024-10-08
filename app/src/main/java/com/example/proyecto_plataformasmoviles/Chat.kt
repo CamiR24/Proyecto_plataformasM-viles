@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -25,19 +26,27 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.KeyboardArrowLeft
 import androidx.compose.ui.text.input.ImeAction
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.proyecto_plataformasmoviles.ui.theme.cocoFontFamily
 
 class Chat : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ChatScreen()
+            val navController = rememberNavController()
+            ChatScreen(navController = navController)
         }
     }
 }
 
 @Composable
-fun ChatScreen() {
+fun ChatScreen(navController: NavHostController) {
     var message by remember { mutableStateOf(TextFieldValue("")) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -47,16 +56,28 @@ fun ChatScreen() {
             .padding(16.dp)
             .background(Color.White)
     ) {
-        Text(
+        Row(){
+            Icon(
+                tint = Color(0xFFbb4491),
+                imageVector = Icons.Outlined.Close,
+                contentDescription = "Localized description",
+                modifier = Modifier
+                    .size(35.dp)
+                    .offset(x= 20.dp,y = 25.dp)
+                    .clickable { navController.navigate("Perfil") }
+            )
+
+            Text(
             text = "Leah",
             color = Color(0xFFbb4491),
             fontSize = 32.sp,
+            fontFamily = cocoFontFamily,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
+                textAlign = TextAlign.Center,
+                modifier = Modifier
                 .padding(top = 8.dp, bottom = 24.dp)
-                .offset(y = 20.dp)
-        )
+                .offset(x= 105.dp,y = 20.dp)
+        )}
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -193,5 +214,6 @@ fun ChatBubble(text: String, color: Color, alignment: Alignment.Horizontal, imag
 @Preview
 @Composable
 fun PreviewChatScreen() {
-    ChatScreen()
+    val navController = rememberNavController()
+    ChatScreen(navController = navController)
 }

@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.Favorite
@@ -96,7 +98,7 @@ fun RecomendacionesScreen(innerPadding: PaddingValues, navController: NavHostCon
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = Color(0xFFbb4491),
                     titleContentColor = Color.White,
-                    actionIconContentColor = Color(0xFF54398C)
+                    actionIconContentColor = Color(0xFFFFFFFF)
                 ),
                 title = {
                     Text(
@@ -108,7 +110,8 @@ fun RecomendacionesScreen(innerPadding: PaddingValues, navController: NavHostCon
                     )
                 },
                 actions = {
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(onClick = { navController.navigate("Ajustes") },
+                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFFFFFFFF), Color(0xFF54398c), Color(0xFF54398c))) {
                         Icon(
                             imageVector = Icons.Outlined.Settings,
                             contentDescription = "Localized description"
@@ -121,47 +124,54 @@ fun RecomendacionesScreen(innerPadding: PaddingValues, navController: NavHostCon
         bottomBar = {
             BottomAppBar(
                 actions = {
-                    IconButton(onClick = { /* do something */ },
+                    IconButton(onClick = { navController.navigate("Notificaciones") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
                         modifier = Modifier
-                            .offset(x=30.dp,y=10.dp)) {
+                            .offset(x=25.dp,y=10.dp)) {
                         Icon(Icons.Filled.CheckCircle, contentDescription = "Localized description")
                     }
-                    IconButton(onClick = { /* do something */ },
+                    IconButton(onClick = { navController.navigate("Perfil") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
-                        modifier = Modifier.offset(x=70.dp,y=10.dp)) {
+                        modifier = Modifier
+                            .offset(x=50.dp,y=10.dp)) {
                         Icon(
                             Icons.Filled.Person,
                             contentDescription = "Localized description",
                         )
                     }
-                    IconButton(onClick = { /* do something */ },
+                    IconButton(onClick = { navController.navigate("Chat") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
-                        modifier = Modifier.offset(x=120.dp,y=10.dp)) {
+                        modifier = Modifier.offset(x=75.dp,y=10.dp)) {
                         Icon(
                             Icons.Filled.Email,
                             contentDescription = "Localized description",
                         )
                     }
-                    IconButton(onClick = { /* do something */ },
+                    IconButton(onClick = { navController.navigate("Recomendaciones") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
-                        modifier = Modifier.offset(x=160.dp,y=10.dp)) {
+                        modifier = Modifier.offset(x=100.dp,y=10.dp)) {
                         Icon(
                             Icons.Filled.Favorite,
                             contentDescription = "Localized description",
                         )
+                    }
+                    IconButton(onClick = { navController.navigate("TusMatches") },
+                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
+                        modifier = Modifier
+                            .offset(x=125.dp,y=10.dp)) {
+                        Icon(Icons.Filled.Star, contentDescription = "Localized description")
                     }
                 },
                 containerColor = Color(0xFFbb4491)
             )
         },
     ) { innerPadding ->
-        Recomendaciones(innerPadding = innerPadding)
+        Recomendaciones(navController = navController, innerPadding = innerPadding)
     }
 }
 
 @Composable
-fun Recomendaciones(innerPadding: PaddingValues) {
+fun Recomendaciones(navController: NavHostController, innerPadding: PaddingValues) {
     Surface(
         modifier = Modifier
             .padding(innerPadding)
@@ -184,10 +194,10 @@ fun Recomendaciones(innerPadding: PaddingValues) {
             )
             LazyColumn {
                 item {
-                    FilaRecomendacion()
-                    FilaRecomendacion()
-                    FilaRecomendacion()
-                    FilaRecomendacion()
+                    FilaRecomendacion(navController)
+                    FilaRecomendacion(navController)
+                    FilaRecomendacion(navController)
+                    FilaRecomendacion(navController)
                 }
             }
         }
@@ -195,7 +205,7 @@ fun Recomendaciones(innerPadding: PaddingValues) {
 }
 
 @Composable
-fun FilaRecomendacion() {
+fun FilaRecomendacion(navController: NavHostController) {
     Surface (
         color = Color(0xFFF1E2EC),
         modifier = Modifier
@@ -215,10 +225,10 @@ fun FilaRecomendacion() {
                     .fillMaxWidth()
             ){
                 item {
-                    PerfilRecomendado()
-                    PerfilRecomendado()
-                    PerfilRecomendado()
-                    PerfilRecomendado()
+                    PerfilRecomendado(navController)
+                    PerfilRecomendado(navController)
+                    PerfilRecomendado(navController)
+                    PerfilRecomendado(navController)
                 }
             }
         }
@@ -226,7 +236,7 @@ fun FilaRecomendacion() {
 }
 
 @Composable
-fun PerfilRecomendado() {
+fun PerfilRecomendado(navController: NavHostController) {
     Card(
         modifier = Modifier
             .padding(10.dp)
@@ -284,6 +294,8 @@ fun PerfilRecomendado() {
                         modifier = Modifier
                             .padding(vertical = 5.dp, horizontal = 10.dp)
                             .align(Alignment.CenterEnd)
+                            .clickable { navController.navigate("Match") }
+
                     )
                 }
             }
