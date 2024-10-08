@@ -70,4 +70,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation ("io.coil-kt:coil:2.2.2")
+    implementation ("io.coil-kt:coil-gif:2.2.2")
+    implementation ("io.coil-kt:coil-compose:2.1.0")
 }
