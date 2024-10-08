@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
@@ -171,196 +172,200 @@ fun Notificaciones(innerPadding: PaddingValues) {
             .background(Color(0xFFECCCE2))
             .padding(16.dp)
     ) {
-        Text(
-            text = "Notificaciones",
-            fontSize = 40.sp,
-            style = MaterialTheme.typography.bodyLarge,
-            fontWeight = FontWeight.Bold,
-            color = colorResource(id = R.color.magenta_custom),
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(bottom = 16.dp)
-        )
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        Column(
-            modifier = Modifier
-                .background(Color(0xff8f70c0), shape = RoundedCornerShape(8.dp))
-                .padding(horizontal = 16.dp, vertical = 20.dp)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Icon(
-                imageVector = Icons.Default.Favorite,
-                contentDescription = "Favorite",
-                tint = Color.White,
-                modifier = Modifier.size(24.dp)
-            )
-
-            Spacer(modifier = Modifier.height(5.dp)) // Espacio entre el ícono y el texto
-
-            Text(
-                text = "¡Woof!",
-                color = Color.White,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "Tienes una coincidencia con Max!",
-                color = Color.White,
-                fontSize = 16.sp,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
-        }
-
-            Spacer(modifier = Modifier.height(20.dp))
-        Column(
-            modifier = Modifier
-                .background(Color(0xFFd3b8c5), shape = RoundedCornerShape(8.dp))
-                .padding(horizontal = 16.dp, vertical = 20.dp)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Icon(
-                imageVector = Icons.Default.Favorite,
-                contentDescription = "Favorite",
-                tint = Color.White,
-                modifier = Modifier.size(24.dp)
-            )
-
-            Spacer(modifier = Modifier.height(5.dp))
-
-            Text(
-                text = "¡Guau!",
-                color = Color.White, 
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "Tienes un nuevo mensaje de Daisy",
-                color = Color.White,
-                fontSize = 16.sp,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
-        }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-        Column(
-            modifier = Modifier
-                .background(Color(0xFFb04a5d), shape = RoundedCornerShape(8.dp))
-                .padding(horizontal = 16.dp, vertical = 20.dp)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Icon(
-                imageVector = Icons.Default.Favorite,
-                contentDescription = "Favorite",
-                tint = Color.White,
-                modifier = Modifier.size(24.dp)
-            )
-
-            Spacer(modifier = Modifier.height(5.dp))
-
-            Text(
-                text = "¡Conoce a Rocky!",
-                color = Color.White, // Personalizar color del texto
-                fontSize = 24.sp, // Tamaño de texto
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "¡Podrían ser una buena pareja de juegos!",
-                color = Color.White,
-                fontSize = 16.sp,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
-        }
-
-        Spacer(modifier = Modifier.height(50.dp))
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            //Primer botón
-            IconButton(onClick = { /*TODO*/ }) {
-                Image(
-                    painter = painterResource(id = R.drawable._icon_facebook),
-                    contentDescription = "Facebook",
-                    //tint = Color.Blue,
-                    modifier = Modifier.size(100.dp)
-                )
-            }
-
-            //Segundo botón
-            IconButton(onClick = { /*TODO*/ }) {
-                Image(
-                    painter = painterResource(id = R.drawable._icon_instagram),
-                    contentDescription = "Instagram",
-                    //tint = Color.Black,
-                    modifier = Modifier.size(100.dp)
-                )
-                
-            }
-            //Tercer botón
-            IconButton(onClick = { /*TODO*/ }) {
-                Image(
-                    painter = painterResource(id = R.drawable._icon_google),
-                    contentDescription = "Google",
-                    //tint = Color.Black,
-                    modifier = Modifier.size(100.dp)
+        LazyColumn {
+            item {
+                Text(
+                    text = stringResource(id = R.string.Notificaciones),
+                    fontSize = 40.sp,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = colorResource(id = R.color.magenta_custom),
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(bottom = 16.dp)
                 )
 
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Column(
+                    modifier = Modifier
+                        .background(Color(0xff8f70c0), shape = RoundedCornerShape(8.dp))
+                        .padding(horizontal = 16.dp, vertical = 20.dp)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Favorite,
+                        contentDescription = stringResource(id = R.string.Favorite),
+                        tint = Color.White,
+                        modifier = Modifier.size(24.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(5.dp)) // Espacio entre el ícono y el texto
+
+                    Text(
+                        text = stringResource(id = R.string.Woof),
+                        color = Color.White,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = stringResource(id = R.string.Coincidencia_Max),
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+                Column(
+                    modifier = Modifier
+                        .background(Color(0xFFd3b8c5), shape = RoundedCornerShape(8.dp))
+                        .padding(horizontal = 16.dp, vertical = 20.dp)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Favorite,
+                        contentDescription = stringResource(id = R.string.Favorite),
+                        tint = Color.White,
+                        modifier = Modifier.size(24.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(5.dp))
+
+                    Text(
+                        text = stringResource(id = R.string.Guau),
+                        color = Color.White,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = stringResource(id = R.string.Mensaje_Daisy),
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Column(
+                    modifier = Modifier
+                        .background(Color(0xFFb04a5d), shape = RoundedCornerShape(8.dp))
+                        .padding(horizontal = 16.dp, vertical = 20.dp)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Favorite,
+                        contentDescription = stringResource(id = R.string.Favorite),
+                        tint = Color.White,
+                        modifier = Modifier.size(24.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(5.dp))
+
+                    Text(
+                        text = stringResource(id = R.string.Rocky),
+                        color = Color.White, // Personalizar color del texto
+                        fontSize = 24.sp, // Tamaño de texto
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = stringResource(id = R.string.Pareja_juegos),
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(50.dp))
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    //Primer botón
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Image(
+                            painter = painterResource(id = R.drawable._icon_facebook),
+                            contentDescription = stringResource(id = R.string.Facebook),
+                            //tint = Color.Blue,
+                            modifier = Modifier.size(100.dp)
+                        )
+                    }
+
+                    //Segundo botón
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Image(
+                            painter = painterResource(id = R.drawable._icon_instagram),
+                            contentDescription = stringResource(id = R.string.Instagram),
+                            //tint = Color.Black,
+                            modifier = Modifier.size(100.dp)
+                        )
+
+                    }
+                    //Tercer botón
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Image(
+                            painter = painterResource(id = R.drawable._icon_google),
+                            contentDescription = stringResource(id = R.string.Google),
+                            //tint = Color.Black,
+                            modifier = Modifier.size(100.dp)
+                        )
+
+                    }
+
+                    //Cuarto botón
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Image(
+                            painter = painterResource(id = R.drawable.icon_gmail),
+                            contentDescription = stringResource(id = R.string.Gmail),
+                            //tint = Color.Black,
+                            modifier = Modifier.size(100.dp)
+                        )
+
+                    }
+
+                    //Quinto botón
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Image(
+                            painter = painterResource(id = R.drawable._icon_tiktok),
+                            contentDescription = stringResource(id = R.string.TikTok),
+                            //tint = Color.DarkGray,
+                            modifier = Modifier.size(100.dp)
+                        )
+
+                    }
+
+                    //Sexto botón
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Image(
+                            painter = painterResource(id = R.drawable._icon_youtube),
+                            contentDescription = stringResource(id = R.string.YouTube),
+                            modifier = Modifier.size(100.dp)
+                        )
+
+                    }
+
+                }
             }
-
-            //Cuarto botón
-            IconButton(onClick = { /*TODO*/ }) {
-                Image(
-                    painter = painterResource(id = R.drawable.icon_gmail),
-                    contentDescription = "Gmail",
-                    //tint = Color.Black,
-                    modifier = Modifier.size(100.dp)
-                )
-
-            }
-
-            //Quinto botón
-            IconButton(onClick = { /*TODO*/ }) {
-                Image(
-                    painter = painterResource(id = R.drawable._icon_tiktok),
-                    contentDescription = "TikTok",
-                    //tint = Color.DarkGray,
-                    modifier = Modifier.size(100.dp)
-                )
-                
-            }
-
-            //Sexto botón
-            IconButton(onClick = { /*TODO*/ }) {
-                Image(
-                    painter = painterResource(id = R.drawable._icon_youtube),
-                    contentDescription = "YouTube",
-                    modifier = Modifier.size(100.dp)
-                )
-                
-            }
-
         }
     }
 }

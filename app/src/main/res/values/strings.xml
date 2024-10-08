@@ -45,4 +45,24 @@
     <string name="next">Siguiente</string>
     <string name="Visitas">Yorki: Milo, Pug: Lucas y Beagle: Tommy... también revisaron tu perfil</string>
 
+
+    //notificaciones
+    <string name = "Notificaciones"> Notificaciones</string>
+    <string name = "Favorite"> Favorite</string>
+    <string name = "Woof"> ¡Woof!</string>
+    <string name = "Coincidencia_Max"> Tienes una coincidencia con Max!</string>
+    <string name = "Guau"> ¡Guau!</string>
+    <string name = "Mensaje_Daisy"> ¡Tienes un nuevo mensaje de Daisy!</string>
+    <string name = "Rocky"> ¡Conoce a Rocky!</string>
+    <string name = "Pareja_juegos"> ¡Podrían ser una buena pareja de juegos!</string>
+    <string name = "Facebook"> Facebook</string>
+    <string name = "Instagram"> Instagram</string>
+    <string name = "Google"> Google</string>
+    <string name = "Gmail"> Gmail</string>
+    <string name = "TikTok"> TikTok</string>
+    <string name = "YouTube"> YouTube</string>
+
+
+
+
 </resources>
