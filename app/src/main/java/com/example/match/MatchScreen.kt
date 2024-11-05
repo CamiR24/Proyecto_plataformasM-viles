@@ -75,7 +75,7 @@ fun DogMatchScreen(navController: NavController) {
             LeahProfileSection()
             MatchSection(navController)
             Spacer(modifier = Modifier.height(40.dp))
-            MatchSection()
+            MatchSection(NavController())
             NextButtonAndClouds(navController)
         }
     }
