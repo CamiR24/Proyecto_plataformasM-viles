@@ -1,5 +1,7 @@
 package com.example.proyecto_plataformasmoviles
 
+import android.graphics.drawable.Icon
+import android.media.Image
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -54,6 +56,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -68,6 +71,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.proyecto_plataformasmoviles.ui.theme.Proyecto_plataformasMovilesTheme
 import com.example.proyecto_plataformasmoviles.ui.theme.cocoFontFamily
+import org.w3c.dom.Text
 
 class PantallaRegistro : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,150 +91,124 @@ class PantallaRegistro : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
-    var dogName by remember { mutableStateOf("") }
-    var dogBreed by remember { mutableStateOf("") }
-    var dogAge by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var email = remember { mutableStateOf("") }
+    var password = remember { mutableStateOf("") }
+    var dogName = remember { mutableStateOf("") }
+    var dogBreed = remember { mutableStateOf("") }
+    var dogAge = remember { mutableStateOf("") }
+    var dogWeight = remember { mutableStateOf("") }
+    var dogAntecedentes = remember { mutableStateOf("") }
 
-    Surface(color = Color(0xFFECCCE2)){
-        Column(modifier = Modifier.fillMaxSize()){
+    Surface(color = Color(0xFFECCCE2)) {
+        Column(modifier = Modifier.fillMaxSize()) {
 
-            Text(text = stringResource(R.string.Registro),
+            Text(
+                text = stringResource(R.string.Registro),
                 color = Color(0xFFbb4491),
                 fontSize = 50.sp,
                 fontFamily = cocoFontFamily,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .offset(x = 20.dp, y = 90.dp)
-                    .padding(50.dp, 0.dp))
+                    .padding(50.dp, 0.dp)
+            )
         }
 
-        Card(colors = CardColors(Color(0xFF78A2AB), Color(0xFFFFFFFF), Color(0xFF78A2AB), Color(0xFF78A2AB)),
+        LazyColumn(
             modifier = Modifier
-                .size(350.dp, 60.dp)
-                .offset(x = 22.dp, y = 200.dp)) {
-            Row(){
-                Image(painter = painterResource(R.drawable.perro),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(50.dp)
-                        .offset(x = 5.dp, y = 5.dp))
-
-                TextField(
-                    value = dogName, //usuario ingresa el valor
-                    colors = get_color(),
-                    onValueChange = {dogName = it}, //guardamos el valor cada vez que este cambie
-                    label = {Text(text = stringResource(R.string.Nombre_del_perro))}
+                .fillMaxWidth()
+        ) {
+            item {
+                Campos(
+                    image = painterResource(R.drawable.perro),
+                    text = stringResource(R.string.Email),
+                    dogInfo = email
                 )
-            }
-        }
-
-        Text(text = stringResource(R.string.Nombre_del_perro),
-            color = Color(0xFF54398c),
-            fontSize = 15.sp,
-            fontFamily = cocoFontFamily,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .offset(x = 80.dp, y = 270.dp)
-                .padding(50.dp, 0.dp))
-
-        Card(colors = CardColors(Color(0xFF78A2AB), Color(0xFFFFFFFF), Color(0xFF78A2AB), Color(0xFF78A2AB)),
-            modifier = Modifier
-                .size(350.dp, 60.dp)
-                .offset(x = 22.dp, y = 300.dp)) {
-            Row(){
-                Image(painter = painterResource(R.drawable.huellas),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(50.dp)
-                        .offset(x = 5.dp, y = 5.dp))
-
-                TextField(
-                    value = dogBreed, //usuario ingresa el valor
-                    colors = get_color(),
-                    onValueChange = {dogBreed = it}, //guardamos el valor cada vez que este cambie
-                    label = {Text(text = stringResource(R.string.Raza_del_perro))}
+                Campos(
+                    image = painterResource(R.drawable.perro),
+                    text = stringResource(R.string.Contraseña),
+                    dogInfo = password
                 )
-            }
-        }
-
-        Text(text = stringResource(R.string.Raza_del_perro),
-            color = Color(0xFF54398c),
-            fontSize = 15.sp,
-            fontFamily = cocoFontFamily,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .offset(x = 90.dp, y = 370.dp)
-                .padding(50.dp, 0.dp))
-
-        Card(colors = CardColors(Color(0xFF78A2AB), Color(0xFFFFFFFF), Color(0xFF78A2AB), Color(0xFF78A2AB)),
-            modifier = Modifier
-                .size(350.dp, 60.dp)
-                .offset(x = 22.dp, y = 400.dp)) {
-            Row(){
-                Image(painter = painterResource(R.drawable.ubicacion),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(50.dp)
-                        .offset(x = 5.dp, y = 5.dp))
-
-                CustomDropdownMenu()
-                    
-                }
-
-            }
-        }
-
-        Text(text = stringResource(R.string.Ubicacion),
-            color = Color(0xFF54398c),
-            fontSize = 15.sp,
-            fontFamily = cocoFontFamily,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .offset(x = 110.dp, y = 470.dp)
-                .padding(50.dp, 0.dp))
-
-        Card(colors = CardColors(Color(0xFF78A2AB), Color(0xFFFFFFFF), Color(0xFF78A2AB), Color(0xFF78A2AB)),
-            modifier = Modifier
-                .size(350.dp, 60.dp)
-                .offset(x = 22.dp, y = 500.dp)) {
-            Row(){
-                Image(painter = painterResource(R.drawable.reloj),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(50.dp)
-                        .offset(x = 5.dp, y = 5.dp))
-
-                TextField(
-                    value = dogAge, //usuario ingresa el valor
-                    colors = get_color(),
-                    onValueChange = {dogAge = it}, //guardamos el valor cada vez que este cambie
-                    label = {Text(text = stringResource(R.string.Edad_del_perro))}
+                Campos(
+                    image = painterResource(R.drawable.perro),
+                    text = stringResource(R.string.Nombre_del_perro),
+                    dogInfo = dogName
                 )
+                Campos(
+                    image = painterResource(R.drawable.huellas),
+                    text = stringResource(R.string.Raza_del_perro),
+                    dogInfo = dogBreed
+                )
+                Campos(
+                    image = painterResource(R.drawable.ubicacion),
+                    text = stringResource(R.string.Ubicacion),
+                    dogInfo = dogName,
+                    menu = { CustomDropdownMenu() })
+                Campos(
+                    image = painterResource(R.drawable.reloj),
+                    text = stringResource(R.string.Edad_del_perro),
+                    dogInfo = dogAge
+                )
+                Campos(
+                    image = painterResource(R.drawable.perro),
+                    text = stringResource(R.string.Peso),
+                    dogInfo = dogWeight
+                )
+                Campos(
+                    image = painterResource(R.drawable.perro),
+                    text = stringResource(R.string.Tamaño),
+                    dogInfo = dogName,
+                    menu = { CustomDropdownMenu() }
+                )
+                Campos(
+                    image = painterResource(R.drawable.perro),
+                    text = stringResource(R.string.Pareja),
+                    dogInfo = dogName,
+                    menu = { CustomDropdownMenu() }
+                )
+                Campos(
+                    image = painterResource(R.drawable.perro),
+                    text = stringResource(R.string.Cria),
+                    dogInfo = dogName,
+                    menu = { CustomDropdownMenu() }
+                )
+                Campos(
+                    image = painterResource(R.drawable.perro),
+                    text = stringResource(R.string.Pedigree),
+                    dogInfo = dogName,
+                    menu = { CustomDropdownMenu() }
+                )
+                Campos(
+                    image = painterResource(R.drawable.perro),
+                    text = stringResource(R.string.Sexo),
+                    dogInfo = dogName,
+                    menu = { CustomDropdownMenu() }
+                )
+                Campos(
+                    image = painterResource(R.drawable.perro),
+                    text = stringResource(R.string.Entrenamiento),
+                    dogInfo = dogName,
+                    menu = { CustomDropdownMenu() }
+                )
+                Campos(
+                    image = painterResource(R.drawable.perro),
+                    text = stringResource(R.string.Antecedentes),
+                    dogInfo = dogAntecedentes
+                )
+                Button(onClick = { navController.navigate("Perfil") },
+                    colors = ButtonColors(Color(0xFFbb4491), Color(0xFFFFFFFF), Color(0xFFbb4491), Color(0xFFbb4491)),
+                    modifier = Modifier
+                        .offset(x = 75.dp, 630.dp)
+                        .size(250.dp, 60.dp)) {
+                    Text(text = stringResource(R.string.Next),
+                        fontSize = 35.sp,
+                        fontFamily = cocoFontFamily,
+                        fontWeight = FontWeight.Bold)
             }
-        }
-
-        Text(text = stringResource(R.string.Edad_del_perro),
-            color = Color(0xFF54398c),
-            fontSize = 15.sp,
-            fontFamily = cocoFontFamily,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .offset(x = 95.dp, y = 570.dp)
-                .padding(50.dp, 0.dp))
-
-        Button(onClick = { navController.navigate("Perfil") },
-            colors = ButtonColors(Color(0xFFbb4491), Color(0xFFFFFFFF), Color(0xFFbb4491), Color(0xFFbb4491)),
-            modifier = Modifier
-                .offset(x = 75.dp, 630.dp)
-                .size(250.dp, 60.dp)) {
-            Text(text = stringResource(R.string.Next),
-                fontSize = 35.sp,
-                fontFamily = cocoFontFamily,
-                fontWeight = FontWeight.Bold)
+            }
         }
     }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -279,6 +257,47 @@ fun CustomDropdownMenu() {
             }
         }
     }
+}
+
+@Composable
+fun Campos(
+    image: Painter,
+    text: String,
+    dogInfo: MutableState<String>,
+    menu: @Composable (() -> Unit)? = null,
+) {
+    Card(colors = CardColors(Color(0xFF78A2AB), Color(0xFFFFFFFF), Color(0xFF78A2AB), Color(0xFF78A2AB)),
+        modifier = Modifier
+            .size(350.dp, 60.dp)
+            .offset(x = 22.dp, y = 200.dp)) {
+        Row(){
+            Image(painter = image,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(50.dp)
+                    .offset(x = 5.dp, y = 5.dp))
+
+            TextField(
+                value = dogInfo.value, //usuario ingresa el valor
+                colors = get_color(),
+                onValueChange = { value -> dogInfo.value = value}, //guardamos el valor cada vez que este cambie
+                label = { Text(text = text) }
+            )
+
+            if (menu != null) {
+                menu()
+            }
+        }
+    }
+
+    Text(text = text,
+        color = Color(0xFF54398c),
+        fontSize = 15.sp,
+        fontFamily = cocoFontFamily,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier
+            .offset(x = 80.dp, y = 270.dp)
+            .padding(50.dp, 0.dp))
 }
 
 
