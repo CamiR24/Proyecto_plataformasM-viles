@@ -31,6 +31,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import kotlinx.coroutines.delay
 import coil.compose.rememberAsyncImagePainter
 import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,20 +47,16 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun DogMatchScreen(navController: NavController) {
     var showConfetti by remember { mutableStateOf(false) }
-
-    // Controlar el tiempo de visualización del GIF
     LaunchedEffect(Unit) {
-        showConfetti = true // Muestra el confeti
-        delay(5000) // Espera 5 segundos
-        showConfetti = false // Oculta el confeti
+        showConfetti = true
+        delay(5000)
+        showConfetti = false
     }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.Fondo))
     ) {
-        // Muestra el GIF de confeti solo si showConfetti es verdadero
         if (showConfetti) {
             Image(
                 painter = rememberAsyncImagePainter("android.resource://${navController.context.packageName}/raw/confeti"),
@@ -75,8 +73,9 @@ fun DogMatchScreen(navController: NavController) {
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             LeahProfileSection()
-            MatchSection(navController) // Pasa navController aquí
+            MatchSection(navController)
             Spacer(modifier = Modifier.height(40.dp))
+            MatchSection()
             NextButtonAndClouds(navController)
         }
     }
@@ -108,7 +107,7 @@ fun LeahProfileSection() {
 }
 
 @Composable
-fun MatchSection(navController: NavController) { // Agregar navController aquí
+fun MatchSection(navController: NavController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
@@ -126,7 +125,6 @@ fun MatchSection(navController: NavController) { // Agregar navController aquí
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // Carga el GIF de confeti
         Image(
             painter = rememberAsyncImagePainter("android.resource://${navController.context.packageName}/raw/confeti"),
             contentDescription = "Confetti Animation",
@@ -173,7 +171,7 @@ fun CircularProfile(name: String, imageRes: Int) {
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .graphicsLayer {
-                    rotationZ = 0f // !curvas
+                    rotationZ = 0f //!curvas
                 }
         )
         Spacer(modifier = Modifier.height(10.dp))
@@ -238,4 +236,5 @@ fun NextButtonAndClouds(navController: NavController) {
 fun DefaultPreview() {
     val navController = rememberNavController()
     DogMatchScreen(navController = navController)
+}
 }

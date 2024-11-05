@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -76,9 +77,9 @@ fun CenterAlignedTopAppBar_Notificaciones(navController: NavHostController) {
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.onPrimary,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface,
-                    actionIconContentColor = MaterialTheme.colorScheme.primary
+                    containerColor = Color(0xFFbb4491),
+                    titleContentColor = Color.White,
+                    actionIconContentColor = Color(0xFF54398C)
                 ),
                 title = {
                     Text(
@@ -90,7 +91,8 @@ fun CenterAlignedTopAppBar_Notificaciones(navController: NavHostController) {
                     )
                 },
                 actions = {
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(onClick = { navController.navigate("Ajustes") },
+                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFFFFFFFF), Color(0xFF54398c), Color(0xFF54398c))) {
                         Icon(
                             imageVector = Icons.Outlined.Settings,
                             contentDescription = "Localized description"
@@ -114,12 +116,13 @@ fun BottomAppBarNotificaciones(innerPadding: PaddingValues, navController: NavHo
                     IconButton(onClick = { navController.navigate("Notificaciones") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
                         modifier = Modifier
-                            .offset(x=30.dp,y=10.dp)) {
+                            .offset(x=25.dp,y=10.dp)) {
                         Icon(Icons.Filled.CheckCircle, contentDescription = "Localized description")
                     }
                     IconButton(onClick = { navController.navigate("Perfil") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
-                        modifier = Modifier.offset(x=70.dp,y=10.dp)) {
+                        modifier = Modifier
+                            .offset(x=50.dp,y=10.dp)) {
                         Icon(
                             Icons.Filled.Person,
                             contentDescription = "Localized description",
@@ -127,7 +130,7 @@ fun BottomAppBarNotificaciones(innerPadding: PaddingValues, navController: NavHo
                     }
                     IconButton(onClick = { navController.navigate("Chat") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
-                        modifier = Modifier.offset(x=120.dp,y=10.dp)) {
+                        modifier = Modifier.offset(x=75.dp,y=10.dp)) {
                         Icon(
                             Icons.Filled.Email,
                             contentDescription = "Localized description",
@@ -135,11 +138,17 @@ fun BottomAppBarNotificaciones(innerPadding: PaddingValues, navController: NavHo
                     }
                     IconButton(onClick = { navController.navigate("Recomendaciones") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
-                        modifier = Modifier.offset(x=160.dp,y=10.dp)) {
+                        modifier = Modifier.offset(x=100.dp,y=10.dp)) {
                         Icon(
                             Icons.Filled.Favorite,
                             contentDescription = "Localized description",
                         )
+                    }
+                    IconButton(onClick = { navController.navigate("TusMatches") },
+                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
+                        modifier = Modifier
+                            .offset(x=125.dp,y=10.dp)) {
+                        Icon(Icons.Filled.Star, contentDescription = "Localized description")
                     }
                 },
                 containerColor = Color(0xFFbb4491)
