@@ -31,7 +31,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import kotlinx.coroutines.delay
 import coil.compose.rememberAsyncImagePainter
 import androidx.compose.ui.text.style.TextAlign
-import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
 class MainActivity : ComponentActivity() {
@@ -75,7 +74,7 @@ fun DogMatchScreen(navController: NavController) {
             LeahProfileSection()
             MatchSection(navController)
             Spacer(modifier = Modifier.height(40.dp))
-            MatchSection(NavController())
+            MatchSection(navController)
             NextButtonAndClouds(navController)
         }
     }
@@ -237,4 +236,4 @@ fun DefaultPreview() {
     val navController = rememberNavController()
     DogMatchScreen(navController = navController)
 }
-}
+
