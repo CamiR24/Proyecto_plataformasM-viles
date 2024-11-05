@@ -8,11 +8,27 @@
     <string name="Descripcion">Leah es una hembra de la raza Westie que vive en Mixco. Tiene siete años y pedrigree. No tiene enfermedades ni ha tenido pareja con anterioridad.</string>
 
     //string pantalla registro
+    /*
+    * pedigree
+    * sexo
+    * entrenamiento
+    * antecedentes
+    */
     <string name="Registro">REGISTRO</string>
+    <string name="Email">Email usuario</string>
+    <string name="Contraseña">Contraseña</string>
     <string name="Nombre_del_perro">Nombre del perro</string>
     <string name="Raza_del_perro">Raza del perro</string>
     <string name="Ubicacion">Ubicación</string>
     <string name="Edad_del_perro">Edad del perro</string>
+    <string name="Peso">Peso del perro</string>
+    <string name="Tamaño">Tamaño del perro</string>
+    <string name="Pareja">¿Ha tenido pareja?</string>
+    <string name="Cria">¿Desea quedarse con alguna cría?</string>
+    <string name="Pedigree">¿Tiene pedigree?</string>
+    <string name="Sexo">Sexo del perro</string>
+    <string name="Entrenamiento">¿Tiene entrenamiento?</string>
+    <string name="Antecedentes">Antecedentes</string>
 
     //string pantalla recomendaciones
     <string name="Recomendaciones">RECOMENDACIONES</string>
