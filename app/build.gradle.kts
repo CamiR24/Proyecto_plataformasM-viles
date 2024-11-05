@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -14,7 +15,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunne r"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -62,7 +63,6 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.car.ui.lib)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -73,4 +73,10 @@ dependencies {
     implementation ("io.coil-kt:coil:2.2.2")
     implementation ("io.coil-kt:coil-gif:2.2.2")
     implementation ("io.coil-kt:coil-compose:2.1.0")
+    //<Firebase SDK dependencies>
+    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
+    //<Firebase SDK dependencies/>
+
 }
