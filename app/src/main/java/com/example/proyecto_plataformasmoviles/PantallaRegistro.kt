@@ -90,6 +90,8 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
     var dogName by remember { mutableStateOf("") }
     var dogBreed by remember { mutableStateOf("") }
     var dogAge by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
 
     Surface(color = Color(0xFFECCCE2)){
         Column(modifier = Modifier.fillMaxSize()){
