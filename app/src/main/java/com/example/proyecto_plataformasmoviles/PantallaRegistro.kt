@@ -64,15 +64,19 @@ import com.example.proyecto_plataformasmoviles.AuthViewModel
 
 class PantallaRegistro : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+
         auth = FirebaseAuth.getInstance()
+        auth.useAppLanguage()
+
         setContent {
             Proyecto_plataformasMovilesTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Perfil(
-                        innerPadding = PaddingValues())
+                    Perfil(innerPadding = PaddingValues())
                 }
             }
         }
@@ -192,20 +196,12 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, auth
                 Spacer(modifier = Modifier.height(20.dp))
                 Button(
                     onClick = {
-                        authViewModel.PantallaRegistro(
+                        // Llamada a la función del ViewModel para registrar al usuario
+                        authViewModel.registrarUsuario(
                             email.value,
                             password.value,
-                            dogName.value,
-                            dogBreed.value,
-                            dogAge.value,
-                            dogWeight.value
+                            navController
                         )
-                        email.value = ""
-                        password.value = ""
-                        dogName.value = ""
-                        dogBreed.value = ""
-                        dogAge.value = ""
-                        dogWeight.value = ""
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFFbb4491),
@@ -222,6 +218,7 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, auth
                         fontWeight = FontWeight.Bold
                     )
                 }
+
             }
         }
     }
