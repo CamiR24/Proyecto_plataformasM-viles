@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -83,9 +84,9 @@ class PantallaInicioSesion : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val navController = rememberNavController()
             Proyecto_plataformasMovilesTheme {
-                val navController = rememberNavController()
-                InicioSesion(navController = navController)
+                InicioSesion(navController = navController, authViewModel = AuthViewModel())
             }
         }
     }
@@ -93,7 +94,7 @@ class PantallaInicioSesion : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InicioSesion( navController: NavController, modifier: Modifier = Modifier) {
+fun InicioSesion( navController: NavController, modifier: Modifier = Modifier,authViewModel: AuthViewModel) {
     // Variables
     val logonb = painterResource(R.drawable.logo_nobg)
     val fucsia = Color(0xFFbb4491)
@@ -359,8 +360,9 @@ fun InicioSesion( navController: NavController, modifier: Modifier = Modifier) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun InicioSesionPreview() {
+    val navController = rememberNavController()
+
     Proyecto_plataformasMovilesTheme {
-        val navController = rememberNavController()
-        InicioSesion(navController = navController)
+        Registro(innerPadding = PaddingValues(16.dp), navController = navController, authViewModel = AuthViewModel())
     }
 }
