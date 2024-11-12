@@ -49,6 +49,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilterChip
@@ -322,8 +323,24 @@ fun InicioSesion(
                         .paddingFromBaseline(top = 20.dp)
                         .offset(x = 2.dp),
                 )
+                ClickableText(
+                    text = buildAnnotatedString {
+                        append("Regístrate Aquí")
+                    },
+                    onClick = {
+                        navController.navigate("Registro")
+                    },
+                    modifier = Modifier
+                        .paddingFromBaseline(top = 19.dp)
+                        .offset(x = 50.dp),
+                    style = TextStyle(
+                        color = morado,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = cocoFontFamily,
+                        fontSize = 16.sp
+                    )
+                )
             }
-
             // Botón para iniciar sesión
             FilledTonalButton(
                 onClick = {
