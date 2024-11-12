@@ -21,7 +21,7 @@ class AuthViewModel : ViewModel() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
 
-                    navController.navigate("PantallaInicioSesion") {
+                    navController.navigate("InicioSesion") {
                     }
                 } else {
                     val errorMessage = task.exception?.message ?: "Error desconocido"

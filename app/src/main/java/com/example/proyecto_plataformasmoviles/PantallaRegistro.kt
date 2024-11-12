@@ -196,7 +196,6 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, auth
                 Spacer(modifier = Modifier.height(20.dp))
                 Button(
                     onClick = {
-                        // Llamada a la función del ViewModel para registrar al usuario
                         authViewModel.registrarUsuario(
                             email.value,
                             password.value,
