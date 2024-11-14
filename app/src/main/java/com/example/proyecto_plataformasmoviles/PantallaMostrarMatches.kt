@@ -169,10 +169,10 @@ fun MostrarMatches(navController: NavHostController, innerPadding: PaddingValues
                 .fillMaxWidth()
                 .background(Color(0xFFF1E2EC))) {
                 item {
-                    PerfilRecomendado(navController)
-                    PerfilRecomendado(navController)
-                    PerfilRecomendado(navController)
-                    PerfilRecomendado(navController)
+                    //PerfilRecomendado(navController)
+                    //PerfilRecomendado(navController)
+                    //PerfilRecomendado(navController)
+                    //PerfilRecomendado(navController)
                 }
             }
         }

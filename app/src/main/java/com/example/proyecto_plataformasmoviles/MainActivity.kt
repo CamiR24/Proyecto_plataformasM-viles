@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -16,12 +17,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.match.DogMatchScreen
+import com.example.proyecto_plataformasmoviles.data.repository.PerfilesRepository
 import com.example.proyecto_plataformasmoviles.ui.theme.Proyecto_plataformasMovilesTheme
+import com.example.proyecto_plataformasmoviles.viewmodel.PerfilViewModel
+import com.example.proyecto_plataformasmoviles.viewmodel.PerfilViewModelFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             Proyecto_plataformasMovilesTheme {
                 App()
@@ -30,17 +35,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
 @Composable
 fun App(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
-    // Get current back stack entry
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    // Get the name of the current screen
-    val currentScreen = backStackEntry?.destination?.route ?: "screen1"
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
     ) { innerPadding ->
@@ -49,16 +48,16 @@ fun App(
             startDestination = "InicioSesion",
             modifier = modifier.padding(innerPadding)
         ) {
-            composable(route = "InicioSesion") { //inicio de sesión
+            composable(route = "InicioSesion") {
                 InicioSesion(navController, authViewModel = AuthViewModel())
             }
 
-            composable(route = "Registro") { //registro
+            composable(route = "Registro") {
                 Registro(innerPadding, navController, authViewModel = AuthViewModel())
             }
 
-            composable(route = "Notificaciones") { //notificaciones
-               CenterAlignedTopAppBar_Notificaciones(navController)
+            composable(route = "Notificaciones") {
+                CenterAlignedTopAppBar_Notificaciones(navController)
             }
 
             composable(route = "Perfil") {
@@ -69,11 +68,11 @@ fun App(
                 RecomendacionesScreen(innerPadding, navController)
             }
 
-            composable(route = "Chat") { //chat
+            composable(route = "Chat") {
                 ChatScreen(navController)
             }
 
-            composable(route = "Match") { //match
+            composable(route = "Match") {
                 DogMatchScreen(navController)
             }
 
@@ -81,7 +80,7 @@ fun App(
                 CenterAlignedTopAppBar_Ajustes(navController)
             }
 
-            composable(route = "TusMatches") { //visualización de los matches
+            composable(route = "TusMatches") {
                 MostrarMatchesScreen(innerPadding, navController)
             }
         }

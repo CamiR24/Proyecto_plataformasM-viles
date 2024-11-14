@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,6 +25,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
@@ -55,6 +57,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -68,15 +73,21 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.proyecto_plataformasmoviles.data.model.Perfil
+import com.example.proyecto_plataformasmoviles.data.repository.PerfilesRepository
 import com.example.proyecto_plataformasmoviles.ui.theme.Proyecto_plataformasMovilesTheme
 import com.example.proyecto_plataformasmoviles.ui.theme.cocoFontFamily
+import com.example.proyecto_plataformasmoviles.viewmodel.PerfilViewModel
+import com.example.proyecto_plataformasmoviles.viewmodel.PerfilViewModelFactory
 
 class Recomendaciones : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             Proyecto_plataformasMovilesTheme {
                 val navController = rememberNavController()
@@ -89,8 +100,25 @@ class Recomendaciones : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecomendacionesScreen(innerPadding: PaddingValues, navController: NavHostController) {
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+fun RecomendacionesScreen(
+    innerPadding: PaddingValues,
+    navController: NavHostController,
+) {
+    // Crea el repositorio y el factory solo en esta pantalla
+    val repository = PerfilesRepository()
+    val factory = PerfilViewModelFactory(repository)
+    val viewModel: PerfilViewModel = viewModel(factory = factory)
+
+    // Llama a las funciones para cargar las recomendaciones por atributos
+    LaunchedEffect(Unit) {
+        viewModel.cargarRecomendacionesPorEdad(5)  // Edad de ejemplo
+        viewModel.cargarRecomendacionesPorUbicacion("Guatemala")  // Ubicación de ejemplo
+        viewModel.cargarRecomendacionesPorRaza("Labrador")  // Raza de ejemplo
+    }
+
+    val recomendacionesPorEdad by viewModel.recomendacionesPorEdad.collectAsState()
+    val recomendacionesPorUbicacion by viewModel.recomendacionesPorUbicacion.collectAsState()
+    val recomendacionesPorRaza by viewModel.recomendacionesPorRaza.collectAsState()
 
     Scaffold(
         topBar = {
@@ -117,69 +145,19 @@ fun RecomendacionesScreen(innerPadding: PaddingValues, navController: NavHostCon
                             contentDescription = "Localized description"
                         )
                     }
-                },
-                scrollBehavior = scrollBehavior,
+                }
             )
         },
         bottomBar = {
             BottomAppBar(
-                actions = {
-//                    IconButton(onClick = { navController.navigate("Notificaciones") },
-//                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
-//                        modifier = Modifier
-//                            .offset(x=25.dp,y=10.dp)) {
-//                        Icon(Icons.Filled.CheckCircle, contentDescription = "Localized description")
-//                    }
-//                    IconButton(onClick = { navController.navigate("Perfil") },
-//                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
-//                        modifier = Modifier
-//                            .offset(x=50.dp,y=10.dp)) {
-//                        Icon(
-//                            Icons.Filled.Person,
-//                            contentDescription = "Localized description",
-//                        )
-//                    }
-//                    IconButton(onClick = { navController.navigate("Chat") },
-//                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
-//                        modifier = Modifier.offset(x=75.dp,y=10.dp)) {
-//                        Icon(
-//                            Icons.Filled.Email,
-//                            contentDescription = "Localized description",
-//                        )
-//                    }
-//                    IconButton(onClick = { navController.navigate("Recomendaciones") },
-//                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
-//                        modifier = Modifier.offset(x=100.dp,y=10.dp)) {
-//                        Icon(
-//                            Icons.Filled.Favorite,
-//                            contentDescription = "Localized description",
-//                        )
-//                    }
-//                    IconButton(onClick = { navController.navigate("TusMatches") },
-//                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
-//                        modifier = Modifier
-//                            .offset(x=125.dp,y=10.dp)) {
-//                        Icon(Icons.Filled.Star, contentDescription = "Localized description")
-//                    }
-                },
+                actions = {},
                 containerColor = Color(0xFFbb4491)
             )
         },
     ) { innerPadding ->
-        Recomendaciones(navController = navController, innerPadding = innerPadding)
-    }
-}
-
-@Composable
-fun Recomendaciones(navController: NavHostController, innerPadding: PaddingValues) {
-    Surface(
-        modifier = Modifier
-            .padding(innerPadding)
-            .fillMaxSize(),
-        color = Color(0xFFECCCE2)
-    ){
-        Column (
+        Column(
             modifier = Modifier
+                .padding(innerPadding)
                 .fillMaxSize()
         ) {
             Text(
@@ -194,19 +172,24 @@ fun Recomendaciones(navController: NavHostController, innerPadding: PaddingValue
             )
             LazyColumn {
                 item {
-                    FilaRecomendacion(navController)
-                    FilaRecomendacion(navController)
-                    FilaRecomendacion(navController)
-                    FilaRecomendacion(navController)
+                    // Mostrar filas de recomendaciones por atributos
+                    FilaRecomendacion(navController, "Por Edad", recomendacionesPorEdad)
+                    FilaRecomendacion(navController, "Por Ubicación", recomendacionesPorUbicacion)
+                    FilaRecomendacion(navController, "Por Raza", recomendacionesPorRaza)
                 }
             }
         }
     }
 }
 
+
 @Composable
-fun FilaRecomendacion(navController: NavHostController) {
-    Surface (
+fun FilaRecomendacion(
+    navController: NavHostController,
+    titulo: String,
+    perfiles: List<Perfil>
+) {
+    Surface(
         color = Color(0xFFF1E2EC),
         modifier = Modifier
             .height(300.dp)
@@ -214,21 +197,17 @@ fun FilaRecomendacion(navController: NavHostController) {
     ) {
         Column {
             Text(
-                text ="Por Atributo",
+                text = titulo,
                 fontFamily = cocoFontFamily,
                 color = Color(0xFFBB4491),
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(10.dp )
+                modifier = Modifier.padding(10.dp)
             )
-            LazyRow (
-                modifier = Modifier
-                    .fillMaxWidth()
-            ){
-                item {
-                    PerfilRecomendado(navController)
-                    PerfilRecomendado(navController)
-                    PerfilRecomendado(navController)
-                    PerfilRecomendado(navController)
+            LazyRow(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(perfiles) { perfil ->
+                    PerfilRecomendado(navController, perfil)
                 }
             }
         }
@@ -236,7 +215,7 @@ fun FilaRecomendacion(navController: NavHostController) {
 }
 
 @Composable
-fun PerfilRecomendado(navController: NavHostController) {
+fun PerfilRecomendado(navController: NavHostController, perfil: Perfil) {
     Card(
         modifier = Modifier
             .padding(10.dp)
@@ -262,7 +241,7 @@ fun PerfilRecomendado(navController: NavHostController) {
                         .clipToBounds()
                 )
             }
-            Row (
+            Row(
                 modifier = Modifier
                     .fillMaxHeight()
                     .fillMaxWidth()
@@ -270,7 +249,7 @@ fun PerfilRecomendado(navController: NavHostController) {
                 verticalAlignment = Alignment.Bottom,
             ) {
                 Text(
-                    text = "Nombre,",
+                    text = perfil.nombre_del_perro,
                     fontFamily = cocoFontFamily,
                     color = Color(0xFFBB4491),
                     fontWeight = FontWeight.Bold,
@@ -278,7 +257,7 @@ fun PerfilRecomendado(navController: NavHostController) {
                     modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)
                 )
                 Text(
-                    text = "Atributo",
+                    text = perfil.ubicacion,
                     fontFamily = cocoFontFamily,
                     color = Color(0xFFBB4491),
                     fontWeight = FontWeight.Bold,
@@ -295,7 +274,6 @@ fun PerfilRecomendado(navController: NavHostController) {
                             .padding(vertical = 5.dp, horizontal = 10.dp)
                             .align(Alignment.CenterEnd)
                             .clickable { navController.navigate("Match") }
-
                     )
                 }
             }
@@ -303,10 +281,12 @@ fun PerfilRecomendado(navController: NavHostController) {
     }
 }
 
-
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun RecomendacionesPreview() {
+    val testRepository = PerfilesRepository()
+    val testViewModel = PerfilViewModel(testRepository)
+
     Proyecto_plataformasMovilesTheme {
         val navController = rememberNavController()
         val innerPadding = PaddingValues()
@@ -314,3 +294,4 @@ fun RecomendacionesPreview() {
         RecomendacionesScreen(innerPadding, navController)
     }
 }
+
