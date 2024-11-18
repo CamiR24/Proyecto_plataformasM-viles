@@ -29,6 +29,12 @@ class PerfilViewModel(private val repository: PerfilesRepository, val likesRepos
     private val _recomendacionesPorRaza = MutableStateFlow<List<Perfil>>(emptyList())
     val recomendacionesPorRaza: StateFlow<List<Perfil>> = _recomendacionesPorRaza
 
+    private val _recomendacionesPorTamaño = MutableStateFlow<List<Perfil>>(emptyList())
+    val recomendacionesPorTamaño: StateFlow<List<Perfil>> = _recomendacionesPorTamaño
+
+    private val _recomendacionesPorPeso = MutableStateFlow<List<Perfil>>(emptyList())
+    val recomendacionesPorPeso: StateFlow<List<Perfil>> = _recomendacionesPorPeso
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
@@ -101,7 +107,34 @@ class PerfilViewModel(private val repository: PerfilesRepository, val likesRepos
         }
     }
 
+    fun cargarRecomendacionesPorTamaño(tamaño: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _recomendacionesPorTamaño.value = emptyList()
+            val result = repository.obtenerPerfilesPorTamaño(tamaño)
+            if (result.isSuccess) {
+                _recomendacionesPorTamaño.value = result.getOrDefault(emptyList())
+            } else {
+                Log.d("CARGAR_PERFIL_T", "Error al cargar el perro por tamaño")
+            }
+            _isLoading.value = false
+        }
+    }
 
+    fun cargarRecomendacionesPorPeso(peso: Int) {
+        val rango = Pair(peso - 3, peso + 3) // Rango de ±3 kg
+        viewModelScope.launch {
+            _isLoading.value = true
+            _recomendacionesPorPeso.value = emptyList()
+            val result = repository.obtenerPerfilesPorRangoDePeso(rango.first, rango.second)
+            if (result.isSuccess) {
+                _recomendacionesPorPeso.value = result.getOrDefault(emptyList())
+            } else {
+                Log.d("CARGAR_PERFIL_P", "Error al cargar el perro por peso")
+            }
+            _isLoading.value = false
+        }
+    }
 
     fun cargarPerfiles() {
         viewModelScope.launch {

@@ -117,17 +117,33 @@ fun RecomendacionesScreen(
 
     val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
 
-    LaunchedEffect(Unit) {
-        viewModel.cargarRecomendacionesPorEdad(5)
-        viewModel.cargarRecomendacionesPorUbicacion("Guatemala")
-        viewModel.cargarRecomendacionesPorRaza("Labrador")
-        currentUserId?.let { viewModel.cargarLikesPorUsuario(it) }
-    }
-
+    // Observa el perfil del usuario y los likes
+    val perfilUsuario by viewModel.perfilUsuario.collectAsState()
     val recomendacionesPorEdad by viewModel.recomendacionesPorEdad.collectAsState()
     val recomendacionesPorUbicacion by viewModel.recomendacionesPorUbicacion.collectAsState()
     val recomendacionesPorRaza by viewModel.recomendacionesPorRaza.collectAsState()
+    val recomendacionesPorTamaño by viewModel.recomendacionesPorTamaño.collectAsState()
+    val recomendacionesPorPeso by viewModel.recomendacionesPorPeso.collectAsState()
     val likesPorUsuario by viewModel.likesPorUsuario.observeAsState(emptyList())
+
+    // Cargar el perfil del usuario y los likes al inicio
+    LaunchedEffect(Unit) {
+        currentUserId?.let { userId ->
+            viewModel.cargarPerfilUsuario(userId)
+            viewModel.cargarLikesPorUsuario(userId)
+        }
+    }
+
+    // Cargar las recomendaciones cuando el perfil del usuario esté disponible
+    LaunchedEffect(perfilUsuario) {
+        perfilUsuario?.let { perfil ->
+            viewModel.cargarRecomendacionesPorEdad(perfil.edad_del_perro)
+            viewModel.cargarRecomendacionesPorUbicacion(perfil.ubicacion)
+            viewModel.cargarRecomendacionesPorRaza(perfil.raza_del_perro)
+            viewModel.cargarRecomendacionesPorTamaño(perfil.tamaño)
+            viewModel.cargarRecomendacionesPorPeso(perfil.peso)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -212,6 +228,8 @@ fun RecomendacionesScreen(
             recomendacionesPorEdad = recomendacionesPorEdad,
             recomendacionesPorUbicacion = recomendacionesPorUbicacion,
             recomendacionesPorRaza = recomendacionesPorRaza,
+            recomendacionesPorTamaño = recomendacionesPorTamaño,
+            recomendacionesPorPeso = recomendacionesPorPeso,
             likesPorUsuario = likesPorUsuario,
             viewModel = viewModel,
             currentUserId = currentUserId.orEmpty()
@@ -226,6 +244,8 @@ fun Recomendaciones(
     recomendacionesPorEdad: List<Perfil>,
     recomendacionesPorUbicacion: List<Perfil>,
     recomendacionesPorRaza: List<Perfil>,
+    recomendacionesPorTamaño: List<Perfil>,
+    recomendacionesPorPeso: List<Perfil>,
     likesPorUsuario: List<String>,
     viewModel: PerfilViewModel,
     currentUserId: String
@@ -254,8 +274,11 @@ fun Recomendaciones(
                     FilaRecomendacion(navController, "Por Edad", recomendacionesPorEdad, likesPorUsuario, viewModel, currentUserId)
                     FilaRecomendacion(navController, "Por Ubicación", recomendacionesPorUbicacion, likesPorUsuario, viewModel, currentUserId)
                     FilaRecomendacion(navController, "Por Raza", recomendacionesPorRaza, likesPorUsuario, viewModel, currentUserId)
+                    FilaRecomendacion(navController, "Por Tamaño", recomendacionesPorTamaño, likesPorUsuario, viewModel, currentUserId)
+                    FilaRecomendacion(navController, "Por Peso", recomendacionesPorPeso, likesPorUsuario, viewModel, currentUserId)
                 }
             }
+
         }
     }
 }
@@ -269,6 +292,22 @@ fun FilaRecomendacion(
     viewModel: PerfilViewModel,
     currentUserId: String
 ) {
+    // Determina la categoría según el título
+    val categoria = when (titulo) {
+        "Por Edad" -> "edad"
+        "Por Ubicación" -> "ubicacion"
+        "Por Raza" -> "raza"
+        "Por Tamaño" -> "tamaño"
+        "Por Peso" -> "peso"
+        else -> "default"
+    }
+
+    // Filtrar perfiles para excluir el del usuario actual y los que tienen el mismo sexo
+    val perfilUsuario = viewModel.perfilUsuario.value // Obtén el perfil del usuario
+    val filteredProfiles = perfiles.filter {
+        it.usuario_id != currentUserId && (perfilUsuario == null || it.sexo != perfilUsuario.sexo)
+    }
+
     Surface(
         color = Color(0xFFF1E2EC),
         modifier = Modifier
@@ -286,10 +325,11 @@ fun FilaRecomendacion(
             LazyRow(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                items(perfiles) { perfil ->
+                items(filteredProfiles) { perfil ->
                     PerfilRecomendado(
                         navController = navController,
                         perfil = perfil,
+                        categoria = categoria, // Pasa la categoría
                         isLiked = likesPorUsuario.contains(perfil.usuario_id),
                         onLikeToggle = { isLiked ->
                             viewModel.toggleLike(currentUserId, perfil.usuario_id, isLiked)
@@ -305,9 +345,20 @@ fun FilaRecomendacion(
 fun PerfilRecomendado(
     navController: NavHostController,
     perfil: Perfil,
+    categoria: String, // Nuevo parámetro para la categoría
     isLiked: Boolean,
     onLikeToggle: (Boolean) -> Unit
 ) {
+    // Determina el atributo a mostrar según la categoría
+    val atributo = when (categoria) {
+        "edad" -> "${perfil.edad_del_perro} años"
+        "ubicacion" -> perfil.ubicacion
+        "raza" -> perfil.raza_del_perro
+        "tamaño" -> perfil.tamaño
+        "peso" -> "${perfil.peso} kg"
+        else -> "Atributo no disponible"
+    }
+
     Card(
         modifier = Modifier
             .padding(10.dp)
@@ -352,7 +403,7 @@ fun PerfilRecomendado(
                     modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)
                 )
                 Text(
-                    text = perfil.ubicacion,
+                    text = atributo, // Muestra el atributo dinámico
                     fontFamily = cocoFontFamily,
                     color = Color(0xFFBB4491),
                     fontWeight = FontWeight.Bold,

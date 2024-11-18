@@ -105,6 +105,47 @@ class PerfilesRepository {
         }
     }
 
+    suspend fun obtenerPerfilesPorTamaño(tamaño: String): Result<List<Perfil>> {
+        return try {
+            val snapshot = perfilesCollection
+                .whereEqualTo("Tamaño", tamaño)
+                .get(Source.SERVER)
+                .await()
+            val perfiles = snapshot.documents.mapNotNull { it.toObject<Perfil>() }
+            Result.success(perfiles)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun obtenerPerfilesPorRangoDePeso(minPeso: Int, maxPeso: Int): Result<List<Perfil>> {
+        return try {
+            val snapshot = perfilesCollection
+                .whereGreaterThanOrEqualTo("Peso", minPeso)
+                .whereLessThanOrEqualTo("Peso", maxPeso)
+                .get(Source.SERVER)
+                .await()
+            val perfiles = snapshot.documents.mapNotNull { it.toObject<Perfil>() }
+            Result.success(perfiles)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun obtenerPerfilesPorSexoDiferente(sexo: String): Result<List<Perfil>> {
+        return try {
+            val snapshot = perfilesCollection
+                .whereNotEqualTo("Sexo", sexo)
+                .get(Source.SERVER)
+                .await()
+            val perfiles = snapshot.documents.mapNotNull { it.toObject<Perfil>() }
+            Result.success(perfiles)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+
     // Actualizar un perfil
     suspend fun actualizarPerfil(id: String, perfil: Perfil): Result<Unit> {
         return try {

@@ -179,7 +179,8 @@ fun CenterAlignedTopAppBar_Perfil(navController: NavHostController, userId: Stri
                     }
                     isLiked = !isLiked
                 }
-            }
+            },
+            currentUserId = currentUserId.orEmpty()
         )
     }
 }
@@ -242,7 +243,8 @@ fun Perfil(
     perfilUsuario: Perfil?,
     isLiked: Boolean,
     likeCount: Int,
-    onLikeToggle: () -> Unit
+    onLikeToggle: () -> Unit,
+    currentUserId: String
 ) {
     Surface(color = Color(0xFFECCCE2)) {
         Column(
@@ -275,14 +277,17 @@ fun Perfil(
                     .offset(x = 4.dp, y = 140.dp)
             )
 
+            // Verifica si el perfil pertenece al usuario actual
+            val isCurrentUser = perfilUsuario?.usuario_id == currentUserId
+
             Row(
                 modifier = Modifier
                     .offset(x = 40.dp, y = 157.dp)
-                    .clickable { onLikeToggle() }
+                    .clickable(enabled = !isCurrentUser) { onLikeToggle() }
             ) {
                 Icon(
-                    imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                    tint = if (isLiked) Color.Red else Color.Gray,
+                    imageVector = if (isCurrentUser) Icons.Filled.Favorite else if (isLiked) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                    tint = if (isCurrentUser) Color.Gray else if (isLiked) Color.Red else Color.Gray,
                     contentDescription = if (isLiked) "Unlike" else "Like",
                     modifier = Modifier
                         .size(30.dp)
@@ -331,3 +336,4 @@ fun Perfil(
         }
     }
 }
+
