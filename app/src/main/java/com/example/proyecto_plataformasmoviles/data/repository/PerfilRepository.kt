@@ -1,5 +1,6 @@
 package com.example.proyecto_plataformasmoviles.data.repository
 
+import android.util.Log
 import com.example.proyecto_plataformasmoviles.data.model.Perfil
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
@@ -43,19 +44,26 @@ class PerfilesRepository {
         }
     }
 
-    // Obtener perfiles por ubicacion específica
     suspend fun obtenerPerfilesPorUbicacion(ubicacion: String): Result<List<Perfil>> {
         return try {
             val snapshot = perfilesCollection
                 .whereEqualTo("Ubicacion", ubicacion)
                 .get(Source.SERVER) // Fuerza a obtener datos del servidor, sin caché
                 .await()
+
+            // Logea los datos originales del documento para verificar la existencia de `Usuario_id`
+            snapshot.documents.forEach { document ->
+                Log.d("PROFILE_FIRESTORE", "Documento crudo: ${document.data}")
+            }
+
             val perfiles = snapshot.documents.mapNotNull { it.toObject<Perfil>() }
+            Log.d("PROFILE_FIRESTORE", "Cargando perfiles mapeados: $perfiles")
             Result.success(perfiles)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
+
 
     // Obtener perfiles por edad específica
     suspend fun obtenerPerfilesPorEdad(edad: Int): Result<List<Perfil>> {
@@ -81,6 +89,18 @@ class PerfilesRepository {
             val perfiles = snapshot.documents.mapNotNull { it.toObject<Perfil>() }
             Result.success(perfiles)
         } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun obtenerPerfilPorUsuario(userId: String): Result<Perfil?> {
+        return try {
+            val snapshot = perfilesCollection.whereEqualTo("Usuario_id", userId).get().await()
+            val perfil = snapshot.documents.firstOrNull()?.toObject<Perfil>() // Obtén el primer documento
+            Log.d("AUTH_USER", "Usuario obtenido correctamente con el id: " + userId)
+            Result.success(perfil)
+        } catch (e: Exception) {
+            Log.d("AUTH_USER", "Usuario obtenido incorrectamente con el id: " + userId)
             Result.failure(e)
         }
     }

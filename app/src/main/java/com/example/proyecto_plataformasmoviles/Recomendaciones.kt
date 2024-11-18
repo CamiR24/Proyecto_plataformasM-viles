@@ -1,6 +1,7 @@
 package com.example.proyecto_plataformasmoviles
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -33,11 +34,13 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
@@ -60,6 +63,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -77,11 +81,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.proyecto_plataformasmoviles.data.model.Perfil
+import com.example.proyecto_plataformasmoviles.data.repository.LikesRepository
 import com.example.proyecto_plataformasmoviles.data.repository.PerfilesRepository
 import com.example.proyecto_plataformasmoviles.ui.theme.Proyecto_plataformasMovilesTheme
 import com.example.proyecto_plataformasmoviles.ui.theme.cocoFontFamily
 import com.example.proyecto_plataformasmoviles.viewmodel.PerfilViewModel
 import com.example.proyecto_plataformasmoviles.viewmodel.PerfilViewModelFactory
+import com.google.firebase.auth.FirebaseAuth
 
 class Recomendaciones : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,21 +110,24 @@ fun RecomendacionesScreen(
     innerPadding: PaddingValues,
     navController: NavHostController,
 ) {
-    // Crea el repositorio y el factory solo en esta pantalla
-    val repository = PerfilesRepository()
-    val factory = PerfilViewModelFactory(repository)
+    val perfilesRepository = PerfilesRepository()
+    val likesRepository = LikesRepository()
+    val factory = PerfilViewModelFactory(perfilesRepository, likesRepository)
     val viewModel: PerfilViewModel = viewModel(factory = factory)
 
-    // Llama a las funciones para cargar las recomendaciones por atributos
+    val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+
     LaunchedEffect(Unit) {
-        viewModel.cargarRecomendacionesPorEdad(5)  // Edad de ejemplo
-        viewModel.cargarRecomendacionesPorUbicacion("Guatemala")  // Ubicación de ejemplo
-        viewModel.cargarRecomendacionesPorRaza("Labrador")  // Raza de ejemplo
+        viewModel.cargarRecomendacionesPorEdad(5)
+        viewModel.cargarRecomendacionesPorUbicacion("Guatemala")
+        viewModel.cargarRecomendacionesPorRaza("Labrador")
+        currentUserId?.let { viewModel.cargarLikesPorUsuario(it) }
     }
 
     val recomendacionesPorEdad by viewModel.recomendacionesPorEdad.collectAsState()
     val recomendacionesPorUbicacion by viewModel.recomendacionesPorUbicacion.collectAsState()
     val recomendacionesPorRaza by viewModel.recomendacionesPorRaza.collectAsState()
+    val likesPorUsuario by viewModel.likesPorUsuario.observeAsState(emptyList())
 
     Scaffold(
         topBar = {
@@ -138,11 +147,10 @@ fun RecomendacionesScreen(
                     )
                 },
                 actions = {
-                    IconButton(onClick = { navController.navigate("Ajustes") },
-                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFFFFFFFF), Color(0xFF54398c), Color(0xFF54398c))) {
+                    IconButton(onClick = { navController.navigate("Ajustes") }) {
                         Icon(
                             imageVector = Icons.Outlined.Settings,
-                            contentDescription = "Localized description"
+                            contentDescription = "Ajustes"
                         )
                     }
                 }
@@ -150,11 +158,82 @@ fun RecomendacionesScreen(
         },
         bottomBar = {
             BottomAppBar(
-                actions = {},
+                actions = {
+                    IconButton(
+                        onClick = { navController.navigate("Notificaciones") },
+                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
+                        modifier = Modifier.offset(x = 25.dp, y = 10.dp)
+                    ) {
+                        Icon(Icons.Filled.CheckCircle, contentDescription = "Notificaciones")
+                    }
+                    IconButton(
+                        onClick = {
+                            val userId = FirebaseAuth.getInstance().currentUser?.uid
+                            if (userId != null) {
+                                navController.navigate("Perfil/$userId")
+                            } else {
+                                Log.e("BottomBar", "No se encontró el ID del usuario autenticado")
+                            }
+                        },
+                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
+                        modifier = Modifier.offset(x = 50.dp, y = 10.dp)
+                    ) {
+                        Icon(Icons.Filled.Person, contentDescription = "Perfil")
+                    }
+                    IconButton(
+                        onClick = { navController.navigate("Chat") },
+                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
+                        modifier = Modifier.offset(x = 75.dp, y = 10.dp)
+                    ) {
+                        Icon(Icons.Filled.Email, contentDescription = "Chat")
+                    }
+                    IconButton(
+                        onClick = { navController.navigate("Recomendaciones") },
+                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
+                        modifier = Modifier.offset(x = 100.dp, y = 10.dp)
+                    ) {
+                        Icon(Icons.Filled.Favorite, contentDescription = "Recomendaciones")
+                    }
+                    IconButton(
+                        onClick = { navController.navigate("TusMatches") },
+                        colors = IconButtonColors(Color(0xFFbb4491), Color(0xFF54398c), Color(0xFF54398c), Color(0xFF54398c)),
+                        modifier = Modifier.offset(x = 125.dp, y = 10.dp)
+                    ) {
+                        Icon(Icons.Filled.Star, contentDescription = "Tus Matches")
+                    }
+                },
                 containerColor = Color(0xFFbb4491)
             )
-        },
+        }
     ) { innerPadding ->
+        Recomendaciones(
+            navController = navController,
+            innerPadding = innerPadding,
+            recomendacionesPorEdad = recomendacionesPorEdad,
+            recomendacionesPorUbicacion = recomendacionesPorUbicacion,
+            recomendacionesPorRaza = recomendacionesPorRaza,
+            likesPorUsuario = likesPorUsuario,
+            viewModel = viewModel,
+            currentUserId = currentUserId.orEmpty()
+        )
+    }
+}
+
+@Composable
+fun Recomendaciones(
+    navController: NavHostController,
+    innerPadding: PaddingValues,
+    recomendacionesPorEdad: List<Perfil>,
+    recomendacionesPorUbicacion: List<Perfil>,
+    recomendacionesPorRaza: List<Perfil>,
+    likesPorUsuario: List<String>,
+    viewModel: PerfilViewModel,
+    currentUserId: String
+) {
+    Surface(
+        color = Color(0xFFECCCE2),
+        modifier = Modifier.fillMaxSize()
+    ) {
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -172,22 +251,23 @@ fun RecomendacionesScreen(
             )
             LazyColumn {
                 item {
-                    // Mostrar filas de recomendaciones por atributos
-                    FilaRecomendacion(navController, "Por Edad", recomendacionesPorEdad)
-                    FilaRecomendacion(navController, "Por Ubicación", recomendacionesPorUbicacion)
-                    FilaRecomendacion(navController, "Por Raza", recomendacionesPorRaza)
+                    FilaRecomendacion(navController, "Por Edad", recomendacionesPorEdad, likesPorUsuario, viewModel, currentUserId)
+                    FilaRecomendacion(navController, "Por Ubicación", recomendacionesPorUbicacion, likesPorUsuario, viewModel, currentUserId)
+                    FilaRecomendacion(navController, "Por Raza", recomendacionesPorRaza, likesPorUsuario, viewModel, currentUserId)
                 }
             }
         }
     }
 }
 
-
 @Composable
 fun FilaRecomendacion(
     navController: NavHostController,
     titulo: String,
-    perfiles: List<Perfil>
+    perfiles: List<Perfil>,
+    likesPorUsuario: List<String>,
+    viewModel: PerfilViewModel,
+    currentUserId: String
 ) {
     Surface(
         color = Color(0xFFF1E2EC),
@@ -207,7 +287,14 @@ fun FilaRecomendacion(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(perfiles) { perfil ->
-                    PerfilRecomendado(navController, perfil)
+                    PerfilRecomendado(
+                        navController = navController,
+                        perfil = perfil,
+                        isLiked = likesPorUsuario.contains(perfil.usuario_id),
+                        onLikeToggle = { isLiked ->
+                            viewModel.toggleLike(currentUserId, perfil.usuario_id, isLiked)
+                        }
+                    )
                 }
             }
         }
@@ -215,12 +302,20 @@ fun FilaRecomendacion(
 }
 
 @Composable
-fun PerfilRecomendado(navController: NavHostController, perfil: Perfil) {
+fun PerfilRecomendado(
+    navController: NavHostController,
+    perfil: Perfil,
+    isLiked: Boolean,
+    onLikeToggle: (Boolean) -> Unit
+) {
     Card(
         modifier = Modifier
             .padding(10.dp)
             .height(200.dp)
-            .width(200.dp),
+            .width(200.dp)
+            .clickable {
+                navController.navigate("Perfil/${perfil.usuario_id}")
+            },
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
         )
@@ -267,13 +362,16 @@ fun PerfilRecomendado(navController: NavHostController, perfil: Perfil) {
                 Box(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Image(
-                        painter = painterResource(R.drawable.like),
+                    Icon(
+                        imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                         contentDescription = "Like",
+                        tint = if (isLiked) Color.Red else Color.Gray,
                         modifier = Modifier
                             .padding(vertical = 5.dp, horizontal = 10.dp)
                             .align(Alignment.CenterEnd)
-                            .clickable { navController.navigate("Match") }
+                            .clickable {
+                                onLikeToggle(!isLiked)
+                            }
                     )
                 }
             }
@@ -285,7 +383,6 @@ fun PerfilRecomendado(navController: NavHostController, perfil: Perfil) {
 @Composable
 fun RecomendacionesPreview() {
     val testRepository = PerfilesRepository()
-    val testViewModel = PerfilViewModel(testRepository)
 
     Proyecto_plataformasMovilesTheme {
         val navController = rememberNavController()

@@ -1,15 +1,18 @@
 package com.example.proyecto_plataformasmoviles.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.proyecto_plataformasmoviles.data.model.Perfil
+import com.example.proyecto_plataformasmoviles.data.repository.LikesRepository
 import com.example.proyecto_plataformasmoviles.data.repository.PerfilesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class PerfilViewModel(private val repository: PerfilesRepository) : ViewModel() {
+class PerfilViewModel(private val repository: PerfilesRepository, val likesRepository: LikesRepository) : ViewModel() {
 
     private val _perfiles = MutableStateFlow<List<Perfil>>(emptyList())
     val perfiles: StateFlow<List<Perfil>> = _perfiles
@@ -29,6 +32,12 @@ class PerfilViewModel(private val repository: PerfilesRepository) : ViewModel() 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
+    private val _perfilUsuario = MutableStateFlow<Perfil?>(null)
+    val perfilUsuario: StateFlow<Perfil?> = _perfilUsuario
+
+    private val _likesPorUsuario = MutableLiveData<List<String>>()
+    val likesPorUsuario: LiveData<List<String>> get() = _likesPorUsuario
+
     fun cargarRecomendacionesPorEdad(edad: Int) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -44,7 +53,7 @@ class PerfilViewModel(private val repository: PerfilesRepository) : ViewModel() 
                 }
                 _recomendacionesPorEdad.value = result.getOrDefault(emptyList())
             } else {
-                _mensajeError.value = "Error al cargar recomendaciones por edad"
+                Log.d("CARGAR_PERFIL_E", "Error al cargar el perro por edad")
             }
             _isLoading.value = false
         }
@@ -65,7 +74,7 @@ class PerfilViewModel(private val repository: PerfilesRepository) : ViewModel() 
                 }
                 _recomendacionesPorUbicacion.value = result.getOrDefault(emptyList())
             } else {
-                _mensajeError.value = "Error al cargar recomendaciones por ubicación"
+                Log.d("CARGAR_PERFIL_U", "Error al cargar el perro por ubicación")
             }
             _isLoading.value = false
         }
@@ -86,11 +95,13 @@ class PerfilViewModel(private val repository: PerfilesRepository) : ViewModel() 
                 }
                 _recomendacionesPorRaza.value = result.getOrDefault(emptyList())
             } else {
-                _mensajeError.value = "Error al cargar recomendaciones por raza"
+                Log.d("CARGAR_PERFIL_R", "Error al cargar el perro por raza")
             }
             _isLoading.value = false
         }
     }
+
+
 
     fun cargarPerfiles() {
         viewModelScope.launch {
@@ -100,6 +111,19 @@ class PerfilViewModel(private val repository: PerfilesRepository) : ViewModel() 
                 _perfiles.value = result.getOrDefault(emptyList())
             } else {
                 _mensajeError.value = "Error al cargar perfiles: ${result.exceptionOrNull()?.message}"
+            }
+            _isLoading.value = false
+        }
+    }
+
+    fun cargarPerfilUsuario(userId: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            val result = repository.obtenerPerfilPorUsuario(userId)
+            if (result.isSuccess) {
+                _perfilUsuario.value = result.getOrNull()
+            } else {
+                _mensajeError.value = "Error al cargar el perfil del usuario"
             }
             _isLoading.value = false
         }
@@ -142,5 +166,42 @@ class PerfilViewModel(private val repository: PerfilesRepository) : ViewModel() 
             }
             _isLoading.value = false
         }
+    }
+
+    // Cargar "likes" de un usuario
+    fun cargarLikesPorUsuario(usuarioId: String) {
+        viewModelScope.launch {
+            val result = likesRepository.obtenerLikesPorUsuario(usuarioId)
+            if (result.isSuccess) {
+                _likesPorUsuario.value = result.getOrDefault(emptyList())
+            }
+        }
+    }
+
+    // Dar o quitar "like"
+    fun toggleLike(usuarioId: String, perfilId: String, isLiked: Boolean) {
+        viewModelScope.launch {
+            if (isLiked) {
+                likesRepository.darLike(usuarioId, perfilId)
+            } else {
+                likesRepository.quitarLike(usuarioId, perfilId)
+            }
+            cargarLikesPorUsuario(usuarioId) // Refrescar los "likes"
+        }
+    }
+
+    // Verificar si un perfil tiene "like" dado por el usuario
+    suspend fun verificarLike(usuarioId: String, perfilId: String): Boolean {
+        val result = likesRepository.verificarLike(usuarioId, perfilId)
+        return result.getOrDefault(false)
+    }
+
+    fun contarLikes(perfilId: String): LiveData<Int> {
+        val likesCount = MutableLiveData<Int>()
+        viewModelScope.launch {
+            val result = likesRepository.contarLikesPorPerfil(perfilId)
+            likesCount.value = result.getOrDefault(0)
+        }
+        return likesCount
     }
 }

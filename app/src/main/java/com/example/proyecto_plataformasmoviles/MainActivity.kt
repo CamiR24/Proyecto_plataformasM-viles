@@ -4,23 +4,20 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.match.DogMatchScreen
-import com.example.proyecto_plataformasmoviles.data.repository.PerfilesRepository
 import com.example.proyecto_plataformasmoviles.ui.theme.Proyecto_plataformasMovilesTheme
-import com.example.proyecto_plataformasmoviles.viewmodel.PerfilViewModel
-import com.example.proyecto_plataformasmoviles.viewmodel.PerfilViewModelFactory
+import com.example.proyecto_plataformasmoviles.viewmodel.AuthViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,8 +57,13 @@ fun App(
                 CenterAlignedTopAppBar_Notificaciones(navController)
             }
 
-            composable(route = "Perfil") {
-                CenterAlignedTopAppBar_Perfil(navController)
+            // Ruta del perfil con parámetro dinámico
+            composable(
+                route = "Perfil/{userId}",
+                arguments = listOf(navArgument("userId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val userId = backStackEntry.arguments?.getString("userId")
+                CenterAlignedTopAppBar_Perfil(navController, userId = userId)
             }
 
             composable(route = "Recomendaciones") {
@@ -86,3 +88,4 @@ fun App(
         }
     }
 }
+

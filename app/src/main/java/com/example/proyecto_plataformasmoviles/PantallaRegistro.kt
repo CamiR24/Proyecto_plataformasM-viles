@@ -56,10 +56,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.ButtonDefaults
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.runtime.remember
-import androidx.navigation.NavController
-import com.example.proyecto_plataformasmoviles.AuthViewModel
+import com.example.proyecto_plataformasmoviles.viewmodel.AuthViewModel
 
 
 class PantallaRegistro : ComponentActivity() {
@@ -75,9 +72,7 @@ class PantallaRegistro : ComponentActivity() {
 
         setContent {
             Proyecto_plataformasMovilesTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Perfil(innerPadding = PaddingValues())
-                }
+
             }
         }
     }
