@@ -113,10 +113,10 @@ fun CenterAlignedTopAppBar_Perfil(navController: NavHostController, userId: Stri
     val perfilUsuario by viewModel.perfilUsuario.collectAsState()
     val likesPorUsuario by viewModel.likesPorUsuario.observeAsState(emptyList())
 
+    val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+
     // Estado para determinar si el perfil está likeado
-    var isLiked by remember(perfilUsuario?.usuario_id, likesPorUsuario) {
-        mutableStateOf(perfilUsuario?.usuario_id?.let { likesPorUsuario.contains(it) } ?: false)
-    }
+    var isLiked by remember { mutableStateOf(false) }
 
     // Observa el recuento de likes dinámicamente
     val likeCount = perfilUsuario?.usuario_id?.let {
@@ -127,8 +127,13 @@ fun CenterAlignedTopAppBar_Perfil(navController: NavHostController, userId: Stri
     LaunchedEffect(userId) {
         if (!userId.isNullOrEmpty()) {
             viewModel.cargarPerfilUsuario(userId)
-            viewModel.cargarLikesPorUsuario(userId)
+            currentUserId?.let { viewModel.cargarLikesPorUsuario(it) }
         }
+    }
+
+    // Actualizar isLiked cada vez que cambien los datos del perfil o los likes
+    LaunchedEffect(perfilUsuario, likesPorUsuario) {
+        isLiked = perfilUsuario?.usuario_id?.let { likesPorUsuario.contains(it) } ?: false
     }
 
     Scaffold(
@@ -168,9 +173,9 @@ fun CenterAlignedTopAppBar_Perfil(navController: NavHostController, userId: Stri
             onLikeToggle = {
                 perfilUsuario?.usuario_id?.let { perfilId ->
                     if (isLiked) {
-                        viewModel.toggleLike(userId.orEmpty(), perfilId, false) // Quitar like
+                        viewModel.toggleLike(currentUserId.orEmpty(), perfilId, false) // Quitar like
                     } else {
-                        viewModel.toggleLike(userId.orEmpty(), perfilId, true) // Dar like
+                        viewModel.toggleLike(currentUserId.orEmpty(), perfilId, true) // Dar like
                     }
                     isLiked = !isLiked
                 }
@@ -178,6 +183,7 @@ fun CenterAlignedTopAppBar_Perfil(navController: NavHostController, userId: Stri
         )
     }
 }
+
 
 @Composable
 fun BottomAppBarPerfil(navController: NavHostController) {
@@ -291,7 +297,7 @@ fun Perfil(
 
             // Descripción dinámica
             val descripcion = perfilUsuario?.let { perfil ->
-                val genero = if (perfil.sexo.equals("hembra", ignoreCase = true)) "una hembra" else "un macho"
+                val genero = if (perfil.sexo.equals("Hembra", ignoreCase = true)) "una hembra" else "un macho"
                 val pedigreeTexto = if (perfil.pedigree) "tiene" else "no tiene"
                 val antecedentes = if (perfil.antecedentes.isNotEmpty()) {
                     perfil.antecedentes
