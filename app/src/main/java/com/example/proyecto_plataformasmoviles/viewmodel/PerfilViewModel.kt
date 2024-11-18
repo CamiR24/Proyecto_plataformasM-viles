@@ -7,12 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.proyecto_plataformasmoviles.data.model.Perfil
 import com.example.proyecto_plataformasmoviles.data.repository.LikesRepository
+import com.example.proyecto_plataformasmoviles.data.repository.MatchesRepository
 import com.example.proyecto_plataformasmoviles.data.repository.PerfilesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class PerfilViewModel(private val repository: PerfilesRepository, val likesRepository: LikesRepository) : ViewModel() {
+class PerfilViewModel(private val repository: PerfilesRepository, val likesRepository: LikesRepository, val matchesRepository: MatchesRepository) : ViewModel() {
 
     private val _perfiles = MutableStateFlow<List<Perfil>>(emptyList())
     val perfiles: StateFlow<List<Perfil>> = _perfiles
@@ -43,6 +44,9 @@ class PerfilViewModel(private val repository: PerfilesRepository, val likesRepos
 
     private val _likesPorUsuario = MutableLiveData<List<String>>()
     val likesPorUsuario: LiveData<List<String>> get() = _likesPorUsuario
+
+    private val _matches = MutableStateFlow<List<Perfil>>(emptyList())
+    val matches: StateFlow<List<Perfil>> = _matches
 
     fun cargarRecomendacionesPorEdad(edad: Int) {
         viewModelScope.launch {
@@ -162,6 +166,29 @@ class PerfilViewModel(private val repository: PerfilesRepository, val likesRepos
         }
     }
 
+    // Cargar los matches del usuario actual
+    fun cargarMatchesDeUsuario(usuarioId: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            val result = matchesRepository.obtenerMatchesDeUsuario(usuarioId)
+            if (result.isSuccess) {
+                val matchedUserIds = result.getOrDefault(emptyList())
+                val matchedProfiles = mutableListOf<Perfil>()
+
+                // Cargar los perfiles de cada usuario con el que se hizo match
+                for (matchedUserId in matchedUserIds) {
+                    val perfilResult = repository.obtenerPerfilPorUsuario(matchedUserId)
+                    perfilResult.getOrNull()?.let { matchedProfiles.add(it) }
+                }
+
+                _matches.value = matchedProfiles
+            } else {
+                _mensajeError.value = "Error al cargar los matches: ${result.exceptionOrNull()?.message}"
+            }
+            _isLoading.value = false
+        }
+    }
+
     fun agregarPerfil(perfil: Perfil) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -212,16 +239,32 @@ class PerfilViewModel(private val repository: PerfilesRepository, val likesRepos
     }
 
     // Dar o quitar "like"
-    fun toggleLike(usuarioId: String, perfilId: String, isLiked: Boolean) {
+    fun toggleLike(usuarioId: String, perfilId: String, isLiked: Boolean, matchesRepository: MatchesRepository) {
         viewModelScope.launch {
             if (isLiked) {
-                likesRepository.darLike(usuarioId, perfilId)
+                val result = likesRepository.darLike(usuarioId, perfilId, matchesRepository)
+                if (result.isSuccess) {
+                    // Verificar si hay un match después de dar like
+                    val matchExists = matchesRepository.verificarMatch(usuarioId, perfilId).getOrDefault(false)
+                    if (!matchExists) {
+                        matchesRepository.crearMatch(usuarioId, perfilId)
+                    }
+                } else {
+                    _mensajeError.value = "Error al dar like: ${result.exceptionOrNull()?.message}"
+                }
             } else {
-                likesRepository.quitarLike(usuarioId, perfilId)
+                val result = likesRepository.quitarLike(usuarioId, perfilId)
+                if (result.isSuccess) {
+                    // Verificar si había un match y eliminarlo si existe
+                    matchesRepository.eliminarMatch(usuarioId, perfilId)
+                } else {
+                    _mensajeError.value = "Error al quitar like: ${result.exceptionOrNull()?.message}"
+                }
             }
-            cargarLikesPorUsuario(usuarioId) // Refrescar los "likes"
+            cargarLikesPorUsuario(usuarioId) // Refrescar los likes
         }
     }
+
 
     // Verificar si un perfil tiene "like" dado por el usuario
     suspend fun verificarLike(usuarioId: String, perfilId: String): Boolean {

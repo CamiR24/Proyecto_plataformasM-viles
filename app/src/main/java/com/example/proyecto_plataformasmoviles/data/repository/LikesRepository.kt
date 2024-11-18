@@ -10,13 +10,31 @@ class LikesRepository {
     private val likesCollection = db.collection("Likes")
 
     // Dar "like" a un perfil
-    suspend fun darLike(usuarioId: String, perfilId: String): Result<Unit> {
+    suspend fun darLike(usuarioId: String, perfilId: String, matchesRepository: MatchesRepository): Result<Unit> {
         return try {
+            // Dar like
             val like = hashMapOf(
                 "usuario_id" to usuarioId,
                 "perfil_id" to perfilId,
             )
             likesCollection.add(like).await()
+
+            // Verificar si el perfil ya dio like de vuelta
+            val likeSnapshot = likesCollection
+                .whereEqualTo("usuario_id", perfilId)
+                .whereEqualTo("perfil_id", usuarioId)
+                .get()
+                .await()
+
+            if (likeSnapshot.documents.isNotEmpty()) {
+                // Verificar si ya existe un match
+                val matchExists = matchesRepository.verificarMatch(usuarioId, perfilId).getOrDefault(false)
+                if (!matchExists) {
+                    // Crear match
+                    matchesRepository.crearMatch(usuarioId, perfilId)
+                }
+            }
+
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)

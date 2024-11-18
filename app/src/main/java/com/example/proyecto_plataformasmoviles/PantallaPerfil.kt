@@ -81,6 +81,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.proyecto_plataformasmoviles.data.model.Perfil
 import com.example.proyecto_plataformasmoviles.data.repository.LikesRepository
+import com.example.proyecto_plataformasmoviles.data.repository.MatchesRepository
 import com.example.proyecto_plataformasmoviles.data.repository.PerfilesRepository
 import com.example.proyecto_plataformasmoviles.ui.theme.Proyecto_plataformasMovilesTheme
 import com.example.proyecto_plataformasmoviles.ui.theme.cocoFontFamily
@@ -107,7 +108,8 @@ class PantallaPerfil : ComponentActivity() {
 fun CenterAlignedTopAppBar_Perfil(navController: NavHostController, userId: String?) {
     val perfilesRepository = PerfilesRepository()
     val likesRepository = LikesRepository()
-    val factory = PerfilViewModelFactory(perfilesRepository, likesRepository)
+    val matchesRepository = MatchesRepository() // Nuevo repositorio
+    val factory = PerfilViewModelFactory(perfilesRepository, likesRepository, matchesRepository)
     val viewModel: PerfilViewModel = viewModel(factory = factory)
 
     val perfilUsuario by viewModel.perfilUsuario.collectAsState()
@@ -137,7 +139,6 @@ fun CenterAlignedTopAppBar_Perfil(navController: NavHostController, userId: Stri
     }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -173,9 +174,9 @@ fun CenterAlignedTopAppBar_Perfil(navController: NavHostController, userId: Stri
             onLikeToggle = {
                 perfilUsuario?.usuario_id?.let { perfilId ->
                     if (isLiked) {
-                        viewModel.toggleLike(currentUserId.orEmpty(), perfilId, false) // Quitar like
+                        viewModel.toggleLike(currentUserId.orEmpty(), perfilId, false, matchesRepository) // Quitar like
                     } else {
-                        viewModel.toggleLike(currentUserId.orEmpty(), perfilId, true) // Dar like
+                        viewModel.toggleLike(currentUserId.orEmpty(), perfilId, true, matchesRepository) // Dar like
                     }
                     isLiked = !isLiked
                 }
@@ -184,7 +185,6 @@ fun CenterAlignedTopAppBar_Perfil(navController: NavHostController, userId: Stri
         )
     }
 }
-
 
 @Composable
 fun BottomAppBarPerfil(navController: NavHostController) {

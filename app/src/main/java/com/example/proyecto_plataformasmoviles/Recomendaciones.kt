@@ -1,5 +1,6 @@
 package com.example.proyecto_plataformasmoviles
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -82,6 +83,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.proyecto_plataformasmoviles.data.model.Perfil
 import com.example.proyecto_plataformasmoviles.data.repository.LikesRepository
+import com.example.proyecto_plataformasmoviles.data.repository.MatchesRepository
 import com.example.proyecto_plataformasmoviles.data.repository.PerfilesRepository
 import com.example.proyecto_plataformasmoviles.ui.theme.Proyecto_plataformasMovilesTheme
 import com.example.proyecto_plataformasmoviles.ui.theme.cocoFontFamily
@@ -112,7 +114,8 @@ fun RecomendacionesScreen(
 ) {
     val perfilesRepository = PerfilesRepository()
     val likesRepository = LikesRepository()
-    val factory = PerfilViewModelFactory(perfilesRepository, likesRepository)
+    val matchesRepository = MatchesRepository()
+    val factory = PerfilViewModelFactory(perfilesRepository, likesRepository, matchesRepository)
     val viewModel: PerfilViewModel = viewModel(factory = factory)
 
     val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
@@ -283,6 +286,7 @@ fun Recomendaciones(
     }
 }
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun FilaRecomendacion(
     navController: NavHostController,
@@ -292,6 +296,8 @@ fun FilaRecomendacion(
     viewModel: PerfilViewModel,
     currentUserId: String
 ) {
+    val matchesRepository = MatchesRepository() // Nuevo repositorio
+
     // Determina la categoría según el título
     val categoria = when (titulo) {
         "Por Edad" -> "edad"
@@ -302,8 +308,7 @@ fun FilaRecomendacion(
         else -> "default"
     }
 
-    // Filtrar perfiles para excluir el del usuario actual y los que tienen el mismo sexo
-    val perfilUsuario = viewModel.perfilUsuario.value // Obtén el perfil del usuario
+    val perfilUsuario = viewModel.perfilUsuario.value
     val filteredProfiles = perfiles.filter {
         it.usuario_id != currentUserId && (perfilUsuario == null || it.sexo != perfilUsuario.sexo)
     }
@@ -329,10 +334,10 @@ fun FilaRecomendacion(
                     PerfilRecomendado(
                         navController = navController,
                         perfil = perfil,
-                        categoria = categoria, // Pasa la categoría
+                        categoria = categoria,
                         isLiked = likesPorUsuario.contains(perfil.usuario_id),
                         onLikeToggle = { isLiked ->
-                            viewModel.toggleLike(currentUserId, perfil.usuario_id, isLiked)
+                            viewModel.toggleLike(currentUserId, perfil.usuario_id, isLiked, matchesRepository)
                         }
                     )
                 }
@@ -356,6 +361,7 @@ fun PerfilRecomendado(
         "raza" -> perfil.raza_del_perro
         "tamaño" -> perfil.tamaño
         "peso" -> "${perfil.peso} kg"
+        "matches" -> "Match!"
         else -> "Atributo no disponible"
     }
 
