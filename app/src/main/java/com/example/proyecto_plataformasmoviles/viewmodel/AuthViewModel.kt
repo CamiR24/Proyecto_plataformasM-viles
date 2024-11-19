@@ -1,4 +1,4 @@
-package com.example.proyecto_plataformasmoviles
+package com.example.proyecto_plataformasmoviles.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

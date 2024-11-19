@@ -5,7 +5,7 @@
     <string name="Perfil">PERFIL</string>
     <string name="Nombre">Leah</string>
     <string name="Numero_likes">132,185</string>
-    <string name="Descripcion">Leah es una hembra de la raza Westie que vive en Mixco. Tiene siete años y pedrigree. No tiene enfermedades ni ha tenido pareja con anterioridad.</string>
+    <string name="Descripcion">%1$s es %2$s de la raza %3$s que vive en %4$s. Tiene %5$d años y %6$s pedigree. %7$s %8$s</string>
 
     //string pantalla registro
     /*
