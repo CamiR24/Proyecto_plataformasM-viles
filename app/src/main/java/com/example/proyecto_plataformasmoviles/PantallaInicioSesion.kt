@@ -7,6 +7,29 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.rounded.Lock
+import androidx.compose.material.icons.rounded.Person
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.proyecto_plataformasmoviles.ui.theme.Proyecto_plataformasMovilesTheme
+import com.example.proyecto_plataformasmoviles.ui.theme.cocoFontFamily
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,77 +38,49 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.rounded.Lock
-import androidx.compose.material.icons.rounded.Person
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.example.proyecto_plataformasmoviles.ui.theme.Proyecto_plataformasMovilesTheme
-import com.example.proyecto_plataformasmoviles.ui.theme.cocoFontFamily
+import com.example.proyecto_plataformasmoviles.viewmodel.AuthViewModel
+import com.google.firebase.auth.FirebaseAuth
+
 
 class PantallaInicioSesion : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val navController = rememberNavController()
             Proyecto_plataformasMovilesTheme {
-                val navController = rememberNavController()
-                InicioSesion(navController = navController)
+                InicioSesion(navController = navController, authViewModel = AuthViewModel())
             }
         }
     }
@@ -93,7 +88,11 @@ class PantallaInicioSesion : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InicioSesion( navController: NavController, modifier: Modifier = Modifier) {
+fun InicioSesion(
+    navController: NavController,
+    authViewModel: AuthViewModel,
+    modifier: Modifier = Modifier
+) {
     // Variables
     val logonb = painterResource(R.drawable.logo_nobg)
     val fucsia = Color(0xFFbb4491)
@@ -101,10 +100,16 @@ fun InicioSesion( navController: NavController, modifier: Modifier = Modifier) {
     val rosado = Color(0xFFECCCE2)
 
     val focusManager = LocalFocusManager.current
-    val context = LocalContext.current.applicationContext // Action button
+    val context = LocalContext.current
     val userValue = rememberSaveable { mutableStateOf("") }
     val passwordValue = rememberSaveable { mutableStateOf("") }
     var passwordVisibility by remember { mutableStateOf(false) }
+    val signInState by authViewModel.signInState.observeAsState()
+
+    // If sign in fails
+    if (signInState == false) {
+        Toast.makeText(context, "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show()
+    }
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -156,12 +161,10 @@ fun InicioSesion( navController: NavController, modifier: Modifier = Modifier) {
                 .padding(top = 250.dp),
             contentAlignment = Alignment.TopCenter
         ) {
-            var text by remember { mutableStateOf("") }
-
             // User Name TextField
             TextField(
-                value = text,
-                onValueChange = { text = it },
+                value = userValue.value,
+                onValueChange = { userValue.value = it },
                 label = { Text(stringResource(id = R.string.user_name)) },
                 maxLines = 1,
                 textStyle = TextStyle(
@@ -212,15 +215,15 @@ fun InicioSesion( navController: NavController, modifier: Modifier = Modifier) {
             )
 
             // Contraseña
-            var password by rememberSaveable { mutableStateOf("") }
-            var isPasswordVisible by rememberSaveable { mutableStateOf(false) } // Variable para mostrar/ocultar contraseña
-
             TextField(
-                value = password,
-                onValueChange = { password = it },
+                value = passwordValue.value,
+                onValueChange = { passwordValue.value = it },
                 label = { Text("Contraseña") },
-                visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+                visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done
+                ),
                 keyboardActions = KeyboardActions(
                     onDone = {
                         focusManager.clearFocus() // Cierra el teclado al terminar
@@ -278,7 +281,7 @@ fun InicioSesion( navController: NavController, modifier: Modifier = Modifier) {
                 FilterChip(
                     onClick = {
                         selected = !selected
-                        isPasswordVisible = selected // Cambiar visibilidad de la contraseña
+                        passwordVisibility = selected
                     },
                     label = {
                         Text("")
@@ -296,10 +299,10 @@ fun InicioSesion( navController: NavController, modifier: Modifier = Modifier) {
                         null
                     },
                     colors = FilterChipDefaults.filterChipColors(
-                        containerColor = fucsia, // Color del chip
-                        labelColor = Color.White, // Color del texto
-                        selectedContainerColor = rosado, // Color cuando está seleccionado
-                        selectedLabelColor = Color.White  // Color texto al seleccionar
+                        containerColor = fucsia,
+                        labelColor = Color.White,
+                        selectedContainerColor = rosado,
+                        selectedLabelColor = Color.White
                     ),
                     modifier = Modifier
                         .size(width = 20.dp, height = 20.dp)
@@ -315,7 +318,6 @@ fun InicioSesion( navController: NavController, modifier: Modifier = Modifier) {
                         .paddingFromBaseline(top = 20.dp)
                         .offset(x = 2.dp),
                 )
-
                 ClickableText(
                     text = buildAnnotatedString {
                         append("Regístrate Aquí")
@@ -333,34 +335,36 @@ fun InicioSesion( navController: NavController, modifier: Modifier = Modifier) {
                         fontSize = 16.sp
                     )
                 )
-
             }
-
-            // Botón "Entrar"
+            // Botón para iniciar sesión
             FilledTonalButton(
-                onClick = {navController.navigate("Perfil")}, //A Pantalla principal
-                colors = ButtonDefaults.buttonColors(containerColor = fucsia), // Color fucsia
+                onClick = {
+                    authViewModel.signInWithEmailAndPassword(
+                        email = userValue.value,
+                        password = passwordValue.value
+                    ) { success, message ->
+                        if (success) {
+                            val userId = FirebaseAuth.getInstance().currentUser?.uid
+                            if (userId != null) {
+                                navController.navigate("Perfil/$userId")
+                            } else {
+                                Toast.makeText(context, "Error: ID de usuario no encontrado", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                },
                 modifier = Modifier
-                    .paddingFromBaseline(top = 370.dp)
-                    .size(width = 150.dp, height = 60.dp)
-                    .background(fucsia, shape = RoundedCornerShape(30.dp))
-                    .imePadding()
+                    .padding(25.dp)
+                    .height(60.dp)
+                    .offset(y = 300.dp)
+                    .fillMaxWidth()
+                    .background(fucsia, RoundedCornerShape(16.dp)),
+                shape = RoundedCornerShape(16.dp),
             ) {
-                Text(
-                    text = "Entrar",
-                    fontSize = 20.sp,
-                    color = Color.White
-                )
+                Text("Iniciar Sesión")
             }
         }
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun InicioSesionPreview() {
-    Proyecto_plataformasMovilesTheme {
-        val navController = rememberNavController()
-        InicioSesion(navController = navController)
     }
 }
