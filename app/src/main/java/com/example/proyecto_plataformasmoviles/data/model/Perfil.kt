@@ -18,6 +18,7 @@ data class Perfil(
     @PropertyName("Tamaño") val tamaño: String = "",
     @PropertyName("Ubicacion") val ubicacion: String = "",
     @PropertyName("Usuario_id") val usuario_id: String = "",
+    @PropertyName("Imagen") val imagen: String = "",
 )
 
 
