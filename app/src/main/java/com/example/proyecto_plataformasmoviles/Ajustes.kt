@@ -52,7 +52,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.android.car.ui.toolbar.MenuItem
 import com.example.proyecto_plataformasmoviles.ui.theme.Proyecto_plataformasMovilesTheme
 import com.example.proyecto_plataformasmoviles.ui.theme.cocoFontFamily
 
@@ -93,7 +92,7 @@ fun CenterAlignedTopAppBar_Ajustes(navController: NavHostController) {
                     )
                 },
                 actions = {
-                    IconButton(onClick = { navController.navigate("Perfil") },
+                    IconButton(onClick = { navController.navigate("Recomendaciones") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFFFFFFFF), Color(0xFF54398c), Color(0xFF54398c)),) {
                         Icon(
                             imageVector = Icons.Outlined.Close,

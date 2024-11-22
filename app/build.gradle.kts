@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -9,12 +10,12 @@ android {
 
     defaultConfig {
         applicationId = "com.example.proyecto_plataformasmoviles"
-        minSdk = 34
+        minSdk = 28
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunne r"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -62,7 +63,8 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.car.ui.lib)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.auth.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -73,4 +75,14 @@ dependencies {
     implementation ("io.coil-kt:coil:2.2.2")
     implementation ("io.coil-kt:coil-gif:2.2.2")
     implementation ("io.coil-kt:coil-compose:2.1.0")
+    //<Firebase SDK dependencies>
+    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
+    //<Firebase SDK dependencies/>
+//<Chat dependencies>
+    implementation("androidx.navigation:navigation-compose:2.8.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
+    implementation("androidx.compose.runtime:runtime-livedata:1.7.3")
+//<Chat dependencies/>
 }

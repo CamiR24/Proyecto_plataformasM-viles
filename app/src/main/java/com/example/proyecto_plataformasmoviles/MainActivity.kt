@@ -4,31 +4,29 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.match.DogMatchScreen
 import com.example.proyecto_plataformasmoviles.ui.theme.Proyecto_plataformasMovilesTheme
+import com.example.proyecto_plataformasmoviles.viewmodel.AuthViewModel
+import com.example.proyecto_plataformasmoviles.viewmodel.NotificacionesViewModel
+import com.example.proyecto_plataformasmoviles.viewmodel.PerfilViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             Proyecto_plataformasMovilesTheme {
                 App()
@@ -37,16 +35,12 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
 @Composable
 fun App(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
-    // Get current back stack entry
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    // Get the name of the current screen
-    val currentScreen = backStackEntry?.destination?.route ?: "screen1"
+    val notificacionesViewModel: NotificacionesViewModel = viewModel()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -56,41 +50,61 @@ fun App(
             startDestination = "InicioSesion",
             modifier = modifier.padding(innerPadding)
         ) {
-            composable(route = "InicioSesion") { //inicio de sesión
-                InicioSesion(navController)
+            composable(route = "InicioSesion") {
+                InicioSesion(navController, authViewModel = AuthViewModel())
             }
 
-            composable(route = "Registro") { //registro
-                Registro(innerPadding, navController)
+            composable(route = "Registro") {
+                Registro(innerPadding, navController, authViewModel = AuthViewModel())
             }
 
-            composable(route = "Notificaciones") { //notificaciones
-               CenterAlignedTopAppBar_Notificaciones(navController)
+            composable(route = "Notificaciones") {
+                CenterAlignedTopAppBar_Notificaciones(navController, notificacionesViewModel)
             }
 
-            composable(route = "Perfil") {
-                CenterAlignedTopAppBar_Perfil(navController)
+            // Ruta del perfil con parámetro dinámico
+            composable(
+                route = "Perfil/{userId}",
+                arguments = listOf(navArgument("userId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val userId = backStackEntry.arguments?.getString("userId")
+                CenterAlignedTopAppBar_Perfil(navController, userId = userId)
             }
 
             composable(route = "Recomendaciones") {
                 RecomendacionesScreen(innerPadding, navController)
             }
 
-            composable(route = "Chat") { //chat
+            composable(route = "Chat") {
                 ChatScreen(navController)
             }
 
-            composable(route = "Match") { //match
-                DogMatchScreen(navController)
+            composable(
+                route = "Match/{usuario1}/{usuario2}",
+                arguments = listOf(
+                    navArgument("usuario1") { type = NavType.StringType },
+                    navArgument("usuario2") { type = NavType.StringType }
+                )
+            ) { backStackEntry ->
+                val usuario1 = backStackEntry.arguments?.getString("usuario1")
+                val usuario2 = backStackEntry.arguments?.getString("usuario2")
+
+                if (usuario1 != null && usuario2 != null) {
+                    DogMatchScreen(navController, usuario1, usuario2)
+                } else {
+                    // Manejar error si los IDs son nulos
+                }
             }
+
 
             composable(route = "Ajustes") {
                 CenterAlignedTopAppBar_Ajustes(navController)
             }
 
-            composable(route = "TusMatches") { //visualización de los matches
+            composable(route = "TusMatches") {
                 MostrarMatchesScreen(innerPadding, navController)
             }
         }
     }
 }
+
