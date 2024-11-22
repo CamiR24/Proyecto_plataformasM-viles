@@ -64,7 +64,7 @@ fun ChatScreen(navController: NavHostController) {
                 modifier = Modifier
                     .size(35.dp)
                     .offset(x= 20.dp,y = 25.dp)
-                    .clickable { navController.navigate("Perfil") }
+                    .clickable { navController.navigate("Recomendaciones") }
             )
 
             Text(
