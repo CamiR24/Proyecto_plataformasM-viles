@@ -67,6 +67,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.proyecto_plataformasmoviles.data.model.Perfil
 import com.example.proyecto_plataformasmoviles.data.repository.LikesRepository
@@ -510,7 +511,7 @@ fun Campos(
                                 textStyle = TextStyle(
                                     color = Color.White,
                                     fontSize = 16.sp,
-                                    fontFamily = cocoFontFamily
+                                    fontFamily = FontFamily.Default
                                 ),
                                 decorationBox = { innerTextField ->
                                     Box(

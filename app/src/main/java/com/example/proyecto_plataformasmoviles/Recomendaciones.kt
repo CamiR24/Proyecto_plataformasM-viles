@@ -73,6 +73,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -404,7 +405,7 @@ fun PerfilRecomendado(
             ) {
                 Text(
                     text = perfil.nombre_del_perro,
-                    fontFamily = cocoFontFamily,
+                    fontFamily = FontFamily.Default,
                     color = Color(0xFFBB4491),
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
@@ -412,7 +413,7 @@ fun PerfilRecomendado(
                 )
                 Text(
                     text = atributo, // Muestra el atributo dinámico
-                    fontFamily = cocoFontFamily,
+                    fontFamily = FontFamily.Default,
                     color = Color(0xFFBB4491),
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
