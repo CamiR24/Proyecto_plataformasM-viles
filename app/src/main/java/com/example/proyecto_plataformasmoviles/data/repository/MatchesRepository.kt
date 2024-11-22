@@ -23,17 +23,11 @@ class MatchesRepository {
             )
             matchesCollection.add(match).await()
 
-            // Crear notificaciones de tipo "match" para ambos usuarios
             notificacionesRepository.crearNotificacion(
                 usuarioId = usuarioId1,
-                tipo = 2,
-                mensaje = "¡Hiciste match con el usuario $usuarioId2!"
-            )
-
-            notificacionesRepository.crearNotificacion(
-                usuarioId = usuarioId2,
-                tipo = 2,
-                mensaje = "¡Hiciste match con el usuario $usuarioId1!"
+                perfilId = usuarioId2,
+                tipo = 2, // Tipo de notificación: Match
+                mensaje = "¡El usuario $usuarioId1 te dio un like!"
             )
 
             // Invoca la navegación

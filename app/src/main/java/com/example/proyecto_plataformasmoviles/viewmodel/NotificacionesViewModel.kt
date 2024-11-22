@@ -21,24 +21,27 @@ class NotificacionesViewModel : ViewModel() {
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> get() = _error
 
+    private val _isLoading = MutableLiveData(false)
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
     fun cargarNotificaciones() {
         val usuarioId = FirebaseAuth.getInstance().currentUser?.uid
         if (usuarioId != null) {
             viewModelScope.launch {
+                _isLoading.value = true
                 val resultado = notificacionesRepository.obtenerNotificacionesDeUsuario(usuarioId)
+                _isLoading.value = false
                 if (resultado.isSuccess) {
-                    _notificaciones.value = resultado.getOrNull() ?: emptyList() // Usar emptyList() si es null
+                    _notificaciones.value = resultado.getOrNull() ?: emptyList()
                 } else {
                     _error.value = "Error al obtener las notificaciones: ${resultado.exceptionOrNull()?.message}"
                     Log.e("NotificacionesVM", "Error: ${resultado.exceptionOrNull()}")
                 }
             }
         } else {
-
             _error.value = "Usuario no autenticado"
         }
     }
-
 
     fun marcarNotificacionComoLeida(notificacionId: String) {
         viewModelScope.launch {

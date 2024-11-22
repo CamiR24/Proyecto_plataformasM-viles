@@ -18,10 +18,11 @@ class NotificacionesRepository {
     private val notificacionesCollection = db.collection("Notificaciones")
 
     // Crear una notificación para un usuario
-    suspend fun crearNotificacion(usuarioId: String, tipo: Int, mensaje: String): Result<Unit> {
+    suspend fun crearNotificacion(usuarioId: String, perfilId: String, tipo: Int, mensaje: String): Result<Unit> {
         return try {
             val notificacion = hashMapOf(
                 "usuario_id" to usuarioId,
+                "perfil_id" to perfilId,
                 "tipo" to tipo,
                 "mensaje" to mensaje,
                 "timestamp" to System.currentTimeMillis(),
@@ -38,7 +39,7 @@ class NotificacionesRepository {
     suspend fun obtenerNotificacionesDeUsuario(usuarioId: String): Result<List<Notificacion>> {
         return try {
             val snapshot = notificacionesCollection
-                .whereEqualTo("usuario_id", usuarioId)
+                .whereEqualTo("perfil_id", usuarioId)
                 .get()
                 .await()
 
@@ -46,15 +47,11 @@ class NotificacionesRepository {
                 doc.toObject(Notificacion::class.java)?.copy(id = doc.id)
             }
 
-            // Retornar el resultado exitoso
             Result.success(notificaciones)
         } catch (e: Exception) {
-            // Retornar el error si ocurre una excepción
             Result.failure(e)
         }
     }
-
-
 
     // Marcar como leída
     suspend fun marcarNotificacionComoLeida(notificacionId: String): Result<Unit> {

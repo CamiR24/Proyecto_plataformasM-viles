@@ -44,6 +44,7 @@ import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilterChip
@@ -356,6 +357,10 @@ fun InicioSesion(
                         }
                     }
                 },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFbb4491),
+                    contentColor = Color.White
+                ),
                 modifier = Modifier
                     .padding(25.dp)
                     .height(60.dp)
@@ -364,7 +369,12 @@ fun InicioSesion(
                     .background(fucsia, RoundedCornerShape(16.dp)),
                 shape = RoundedCornerShape(16.dp),
             ) {
-                Text("Iniciar Sesión")
+                Text(
+                    text =("Iniciar Sesion"),
+                    fontSize = 20.sp,
+                    fontFamily = cocoFontFamily,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
     }

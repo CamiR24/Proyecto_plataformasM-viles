@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -18,6 +19,7 @@ import androidx.navigation.navArgument
 import com.example.match.DogMatchScreen
 import com.example.proyecto_plataformasmoviles.ui.theme.Proyecto_plataformasMovilesTheme
 import com.example.proyecto_plataformasmoviles.viewmodel.AuthViewModel
+import com.example.proyecto_plataformasmoviles.viewmodel.NotificacionesViewModel
 import com.example.proyecto_plataformasmoviles.viewmodel.PerfilViewModel
 
 class MainActivity : ComponentActivity() {
@@ -38,6 +40,8 @@ fun App(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
+    val notificacionesViewModel: NotificacionesViewModel = viewModel()
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
     ) { innerPadding ->
@@ -55,7 +59,7 @@ fun App(
             }
 
             composable(route = "Notificaciones") {
-                CenterAlignedTopAppBar_Notificaciones(navController)
+                CenterAlignedTopAppBar_Notificaciones(navController, notificacionesViewModel)
             }
 
             // Ruta del perfil con parámetro dinámico

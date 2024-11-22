@@ -27,10 +27,12 @@ class LikesRepository {
 
             // Notificación de tipo "like"
             notificacionesRepository.crearNotificacion(
-                usuarioId = perfilId,
-                tipo = 1,
+                usuarioId = usuarioId,
+                perfilId = perfilId,
+                tipo = 1, // Tipo de notificación: Like
                 mensaje = "¡El usuario $usuarioId te dio un like!"
             )
+
 
             // Verificar si el perfil ya dio like de vuelta
             val likeSnapshot = likesCollection

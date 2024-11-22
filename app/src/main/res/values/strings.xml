@@ -82,5 +82,9 @@
 
     //
     <string name="TusMatches">TUS MATCHES</string>
+
+    <!-- Notificaciones -->
+    <string name="notificacion_like">¡%1$s te dio un like!</string>
+    <string name="notificacion_match">¡Hiciste match con %1$s!</string>
     
 </resources>

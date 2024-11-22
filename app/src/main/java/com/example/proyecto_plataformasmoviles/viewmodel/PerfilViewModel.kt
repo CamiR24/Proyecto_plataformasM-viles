@@ -65,6 +65,18 @@ class PerfilViewModel(private val repository: PerfilesRepository, val likesRepos
         }
     }
 
+    fun obtenerNombrePorUsuario(usuarioId: String, onResult: (String?) -> Unit) {
+        viewModelScope.launch {
+            val result = repository.obtenerPerfilPorUsuario(usuarioId)
+            if (result.isSuccess) {
+                val nombre = result.getOrNull()?.nombre_del_perro
+                onResult(nombre)
+            } else {
+                onResult(null) // Retorna null si hay un error
+            }
+        }
+    }
+
     fun cargarRecomendacionesPorEdad(edad: Int) {
         viewModelScope.launch {
             _isLoading.value = true
