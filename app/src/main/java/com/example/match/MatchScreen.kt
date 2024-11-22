@@ -34,13 +34,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.compose.rememberNavController
 import com.example.proyecto_plataformasmoviles.data.model.Perfil
+import com.example.proyecto_plataformasmoviles.data.repository.PerfilesRepository
 
 class MatchScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            DogMatchScreen(navController = navController)
+            //DogMatchScreen(navController = navController)
         }
     }
 }
@@ -58,47 +59,40 @@ MatchSection: perfil del usuario y el del "match" con un el texto de "MATCH!"
 NextButtonAndClouds: botón para continuar y una imagen decorativa de nubes
  */
 @Composable
-fun DogMatchScreen(
-    navController: NavController,
+fun DogMatchScreen(navController: NavController, usuario1: String, usuario2: String) {
+    val perfilesRepository = PerfilesRepository()
 
-    //Hey! Esta parte es solo para demostracion. A mi me sirve bastante poder ver el preview y no me dejaba sin el firebase activado?? Algo asi me tiraba el mensaje
-    //Entonces, solo llene las variables con datos de prueba
-    userProfile: Perfil = Perfil(
-        nombre_del_perro = "Rufus",
-        raza_del_perro = "Baset Hound",
-        imagen = "https://Leah.png",
-    ),
-    matchedProfile: Perfil = Perfil(
-        nombre_del_perro = "Titi",
-        raza_del_perro = "Salchicha",
-        imagen = "https://Salchicha.png",
-    ),
-    otherViewers: List<Perfil> = listOf(
-        Perfil(
-            nombre_del_perro = "Bobby",
-            raza_del_perro = "Hush Puppy",
-        ),
-        Perfil(
-            nombre_del_perro = "Bella",
-            raza_del_perro = "Beagle",
-        )
-    )
-) {
+    val userProfile = remember { mutableStateOf<Perfil?>(null) }
+    val matchedProfile = remember { mutableStateOf<Perfil?>(null) }
+
+    // Cargar perfiles al iniciar
+    LaunchedEffect(usuario1, usuario2) {
+        val userProfileResult = perfilesRepository.obtenerPerfilPorUsuario(usuario1)
+        val matchedProfileResult = perfilesRepository.obtenerPerfilPorUsuario(usuario2)
+
+        userProfile.value = userProfileResult.getOrNull()
+        matchedProfile.value = matchedProfileResult.getOrNull()
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.Fondo))
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(0.dp),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            LeahProfileSection(userProfile)
-            MatchSection(userProfile, matchedProfile)
-            Spacer(modifier = Modifier.height(0.dp))
-            NextButtonAndClouds(navController, otherViewers)
+        if (userProfile.value != null && matchedProfile.value != null) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(0.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                LeahProfileSection(userProfile.value!!)
+                MatchSection(userProfile.value!!, matchedProfile.value!!)
+                Spacer(modifier = Modifier.height(0.dp))
+                NextButtonAndClouds(navController, listOf()) // Puedes añadir otros viewers si es necesario
+            }
+        } else {
+            Text("Cargando...", modifier = Modifier.align(Alignment.Center))
         }
     }
 }
@@ -255,7 +249,7 @@ fun NextButtonAndClouds(navController: NavController, otherViewers: List<Perfil>
     Box(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.align(Alignment.BottomCenter)) {
             Button(
-                onClick = { navController.navigate("Perfil") },
+                onClick = { navController.navigate("Recomendaciones") },
                 colors = ButtonDefaults.buttonColors(colorResource(id = R.color.petPurple)),
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -311,6 +305,6 @@ fun NextButtonAndClouds(navController: NavController, otherViewers: List<Perfil>
 @Composable
 fun DefaultPreview() {
     val navController = rememberNavController()
-    DogMatchScreen(navController = navController)
+    //DogMatchScreen(navController = navController)
 }
 

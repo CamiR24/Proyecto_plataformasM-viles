@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.example.proyecto_plataformasmoviles.data.model.Perfil
 import com.example.proyecto_plataformasmoviles.data.repository.LikesRepository
 import com.example.proyecto_plataformasmoviles.data.repository.MatchesRepository
@@ -255,15 +256,32 @@ class PerfilViewModel(private val repository: PerfilesRepository, val likesRepos
     }
 
     // Dar o quitar "like"
-    fun toggleLike(usuarioId: String, perfilId: String, isLiked: Boolean, matchesRepository: MatchesRepository, notificacionesRepository: NotificacionesRepository) {
+    fun toggleLike(
+        usuarioId: String,
+        perfilId: String,
+        isLiked: Boolean,
+        matchesRepository: MatchesRepository,
+        notificacionesRepository: NotificacionesRepository,
+        navController: NavController
+    ) {
         viewModelScope.launch {
             if (isLiked) {
-                val result = likesRepository.darLike(usuarioId, perfilId, matchesRepository, notificacionesRepository)
+                val result = likesRepository.darLike(usuarioId, perfilId, matchesRepository, notificacionesRepository, { usuarioId, perfilId ->
+                    // Navega al DogMatchScreen con los IDs
+                    navController.navigate("Match/$usuarioId/$perfilId")
+                })
                 if (result.isSuccess) {
                     // Verificar si hay un match después de dar like
                     val matchExists = matchesRepository.verificarMatch(usuarioId, perfilId).getOrDefault(false)
                     if (!matchExists) {
-                        matchesRepository.crearMatch(usuarioId, perfilId, notificacionesRepository)
+                        matchesRepository.crearMatch(
+                            usuarioId,
+                            perfilId,
+                            notificacionesRepository
+                        ) { id1, id2 ->
+                            // Navega al DogMatchScreen con los IDs
+                            navController.navigate("Match/$id1/$id2")
+                        }
                     }
                 } else {
                     _mensajeError.value = "Error al dar like: ${result.exceptionOrNull()?.message}"
@@ -280,6 +298,7 @@ class PerfilViewModel(private val repository: PerfilesRepository, val likesRepos
             cargarLikesPorUsuario(usuarioId) // Refrescar los likes
         }
     }
+
 
 
     // Verificar si un perfil tiene "like" dado por el usuario

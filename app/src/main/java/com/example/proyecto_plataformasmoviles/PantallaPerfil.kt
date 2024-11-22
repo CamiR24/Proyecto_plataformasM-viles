@@ -176,9 +176,9 @@ fun CenterAlignedTopAppBar_Perfil(navController: NavHostController, userId: Stri
             onLikeToggle = {
                 perfilUsuario?.usuario_id?.let { perfilId ->
                     if (isLiked) {
-                        viewModel.toggleLike(currentUserId.orEmpty(), perfilId, false, matchesRepository, notificacionesRepository) // Quitar like
+                        viewModel.toggleLike(currentUserId.orEmpty(), perfilId, false, matchesRepository, notificacionesRepository, navController) // Quitar like
                     } else {
-                        viewModel.toggleLike(currentUserId.orEmpty(), perfilId, true, matchesRepository, notificacionesRepository) // Dar like
+                        viewModel.toggleLike(currentUserId.orEmpty(), perfilId, true, matchesRepository, notificacionesRepository, navController) // Dar like
                     }
                     isLiked = !isLiked
                 }

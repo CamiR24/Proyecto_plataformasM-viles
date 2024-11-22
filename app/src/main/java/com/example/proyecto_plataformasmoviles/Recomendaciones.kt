@@ -339,7 +339,7 @@ fun FilaRecomendacion(
                         categoria = categoria,
                         isLiked = likesPorUsuario.contains(perfil.usuario_id),
                         onLikeToggle = { isLiked ->
-                            viewModel.toggleLike(currentUserId, perfil.usuario_id, isLiked, matchesRepository, notificacionesRepository)
+                            viewModel.toggleLike(currentUserId, perfil.usuario_id, isLiked, matchesRepository, notificacionesRepository, navController)
                         }
                     )
                 }

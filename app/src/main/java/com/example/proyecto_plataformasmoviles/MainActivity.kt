@@ -75,9 +75,23 @@ fun App(
                 ChatScreen(navController)
             }
 
-            composable(route = "Match") {
-                DogMatchScreen(navController)
+            composable(
+                route = "Match/{usuario1}/{usuario2}",
+                arguments = listOf(
+                    navArgument("usuario1") { type = NavType.StringType },
+                    navArgument("usuario2") { type = NavType.StringType }
+                )
+            ) { backStackEntry ->
+                val usuario1 = backStackEntry.arguments?.getString("usuario1")
+                val usuario2 = backStackEntry.arguments?.getString("usuario2")
+
+                if (usuario1 != null && usuario2 != null) {
+                    DogMatchScreen(navController, usuario1, usuario2)
+                } else {
+                    // Manejar error si los IDs son nulos
+                }
             }
+
 
             composable(route = "Ajustes") {
                 CenterAlignedTopAppBar_Ajustes(navController)

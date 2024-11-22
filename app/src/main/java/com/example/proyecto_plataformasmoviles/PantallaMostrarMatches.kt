@@ -216,7 +216,7 @@ fun MostrarMatches(
                         isLiked = true, // En esta pantalla siempre se asume que el match está activo
                         onLikeToggle = {
                             // Forzamos a quitar el like y manejar el match
-                            viewModel.toggleLike(currentUserId, perfil.usuario_id, false, matchesRepository, notificacionesRepository)
+                            viewModel.toggleLike(currentUserId, perfil.usuario_id, false, matchesRepository, notificacionesRepository, navController)
                         }
                     )
                 }

@@ -9,7 +9,12 @@ class MatchesRepository {
     private val matchesCollection = db.collection("Matches")
 
     // Crear un match entre dos usuarios
-    suspend fun crearMatch(usuarioId1: String, usuarioId2: String, notificacionesRepository: NotificacionesRepository): Result<Unit> {
+    suspend fun crearMatch(
+        usuarioId1: String,
+        usuarioId2: String,
+        notificacionesRepository: NotificacionesRepository,
+        onNavigate: (String, String) -> Unit
+    ): Result<Unit> {
         return try {
             val match = hashMapOf(
                 "usuario1" to usuarioId1,
@@ -18,8 +23,7 @@ class MatchesRepository {
             )
             matchesCollection.add(match).await()
 
-            //Crear notificaciones de tipo "match" para ambos usuarios
-
+            // Crear notificaciones de tipo "match" para ambos usuarios
             notificacionesRepository.crearNotificacion(
                 usuarioId = usuarioId1,
                 tipo = 2,
@@ -29,13 +33,18 @@ class MatchesRepository {
             notificacionesRepository.crearNotificacion(
                 usuarioId = usuarioId2,
                 tipo = 2,
-                mensaje = "!Hiciste match con el usuario $usuarioId1"
+                mensaje = "¡Hiciste match con el usuario $usuarioId1"
             )
+
+            // Invoca la navegación
+            onNavigate(usuarioId1, usuarioId2)
+
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
+
 
     // Verificar si ya existe un match entre dos usuarios
     suspend fun verificarMatch(usuarioId1: String, usuarioId2: String): Result<Boolean> {
