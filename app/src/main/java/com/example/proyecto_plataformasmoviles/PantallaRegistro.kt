@@ -1,6 +1,7 @@
 package com.example.proyecto_plataformasmoviles
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -26,7 +27,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -55,7 +55,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.Alignment
 import com.example.proyecto_plataformasmoviles.viewmodel.AuthViewModel
 
 
@@ -100,127 +104,213 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, auth
                 fontFamily = cocoFontFamily,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
-                    .offset(x = 20.dp, y = 90.dp)
-                    .padding(50.dp, 0.dp)
+                    .offset(x = 20.dp, y = 10.dp)
+                    .padding(horizontal = 50.dp, vertical = 30.dp)
             )
-        }
 
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            item {
-                Campos(
-                    image = painterResource(R.drawable.perro),
-                    text = stringResource(R.string.Email),
-                    dogInfo = email,
-                    onValueChange = { email.value = it }
-                )
-                Campos(
-                    image = painterResource(R.drawable.perro),
-                    text = stringResource(R.string.Contraseña),
-                    dogInfo = password,
-                    onValueChange = { password.value = it }
-                )
-                Campos(
-                    image = painterResource(R.drawable.perro),
-                    text = stringResource(R.string.Nombre_del_perro),
-                    dogInfo = dogName
-                )
-                Campos(
-                    image = painterResource(R.drawable.huellas),
-                    text = stringResource(R.string.Raza_del_perro),
-                    dogInfo = dogBreed
-                )
-                Campos(
-                    image = painterResource(R.drawable.ubicacion),
-                    text = stringResource(R.string.Ubicacion),
-                    dogInfo = dogName,
-                    menu = { CustomDropdownMenu() })
-                Campos(
-                    image = painterResource(R.drawable.reloj),
-                    text = stringResource(R.string.Edad_del_perro),
-                    dogInfo = dogAge
-                )
-                Campos(
-                    image = painterResource(R.drawable.perro),
-                    text = stringResource(R.string.Peso),
-                    dogInfo = dogWeight
-                )
-                Campos(
-                    image = painterResource(R.drawable.perro),
-                    text = stringResource(R.string.Tamaño),
-                    dogInfo = dogName,
-                    menu = { CustomDropdownMenu() }
-                )
-                Campos(
-                    image = painterResource(R.drawable.perro),
-                    text = stringResource(R.string.Pareja),
-                    dogInfo = dogName,
-                    menu = { CustomDropdownMenu() }
-                )
-                Campos(
-                    image = painterResource(R.drawable.perro),
-                    text = stringResource(R.string.Cria),
-                    dogInfo = dogName,
-                    menu = { CustomDropdownMenu() }
-                )
-                Campos(
-                    image = painterResource(R.drawable.perro),
-                    text = stringResource(R.string.Pedigree),
-                    dogInfo = dogName,
-                    menu = { CustomDropdownMenu() }
-                )
-                Campos(
-                    image = painterResource(R.drawable.perro),
-                    text = stringResource(R.string.Sexo),
-                    dogInfo = dogName,
-                    menu = { CustomDropdownMenu() }
-                )
-                Campos(
-                    image = painterResource(R.drawable.perro),
-                    text = stringResource(R.string.Entrenamiento),
-                    dogInfo = dogName,
-                    menu = { CustomDropdownMenu() }
-                )
-                Campos(
-                    image = painterResource(R.drawable.perro),
-                    text = stringResource(R.string.Antecedentes),
-                    dogInfo = dogAntecedentes
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-                Button(
-                    onClick = {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .padding(8.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                item {
+                    Campos(
+                        image = painterResource(R.drawable.email1),
+                        text = stringResource(R.string.Email),
+                        dogInfo = email,
+                        onValueChange = { email.value = it }
+                    )
+                }
+                item {
+                    Campos(
+                        image = painterResource(R.drawable.password1),
+                        text = stringResource(R.string.Contraseña),
+                        dogInfo = password,
+                        onValueChange = { password.value = it }
+                    )
+                }
+                item {
+                    Campos(
+                        image = painterResource(R.drawable.perro),
+                        text = stringResource(R.string.Nombre_del_perro),
+                        dogInfo = dogName
+                    )
+                }
+                item {
+                    Campos(
+                        image = painterResource(R.drawable.huellas),
+                        text = stringResource(R.string.Raza_del_perro),
+                        dogInfo = dogBreed
+                    )
+                }
+                item {
+                    Campos(
+                        image = painterResource(R.drawable.ubicacion),
+                        text = stringResource(R.string.Ubicacion),
+                        menu = {
+                            CustomDropdownMenu(
+                                listOf(
+                                    "Ubicacion",
+                                    "Guatemala",
+                                    "Baja Verapaz",
+                                    "Alta Verapaz",
+                                    "El Progreso",
+                                    "Izabal",
+                                    "Chiquimula",
+                                    "Zacapa",
+                                    "Santa Rosa",
+                                    "Jalapa",
+                                    "Jutiapa",
+                                    "Sacatepéquez",
+                                    "Chimaltenango",
+                                    "Escuintla",
+                                    "Sololá",
+                                    "Totonicapán",
+                                    "Quetzaltenango",
+                                    "Suchitepéquez",
+                                    "Retalhuleu",
+                                    "San Marcos",
+                                    "Huehuetenango",
+                                    "Quiché",
+                                    "Petén"
+                                )
+                            )
+                        }
+                    )
+                }
+                item {
+                    Campos(
+                        image = painterResource(R.drawable.reloj),
+                        text = stringResource(R.string.Edad_del_perro),
+                        dogInfo = dogAge
+                    )
+                }
+                item {
+                    Campos(
+                        image = painterResource(R.drawable.weight1),
+                        text = stringResource(R.string.Peso),
+                        dogInfo = dogWeight
+                    )
+                }
+                item {
+                    Campos(
+                        image = painterResource(R.drawable.size1),
+                        text = stringResource(R.string.Tamaño),
+                        menu = {
+                            CustomDropdownMenu(
+                                listOf(
+                                    "Tamaño",
+                                    "Pequeño",
+                                    "Mediano",
+                                    "Grande"
+                                )
+                            )
+                        }
+                    )
+                }
+                item {
+                    Campos(
+                        image = painterResource(R.drawable.partner1),
+                        text = stringResource(R.string.Pareja),
+                        menu = { CustomDropdownMenu(listOf("Ha tenido pareja?", "Sí", "No")) }
+                    )
+                }
+                item {
+                    Campos(
+                        image = painterResource(R.drawable.cria1),
+                        text = stringResource(R.string.Cria),
+                        menu = { CustomDropdownMenu(listOf("Desea crías?", "Sí", "No")) }
+                    )
+                }
+                item {
+                    Campos(
+                        image = painterResource(R.drawable.pedigree1),
+                        text = stringResource(R.string.Pedigree),
+                        menu = { CustomDropdownMenu(listOf("Tiene pedigree?", "Sí", "No")) }
+                    )
+                }
+                item {
+                    Campos(
+                        image = painterResource(R.drawable.sex1),
+                        text = stringResource(R.string.Sexo),
+                        menu = { CustomDropdownMenu(listOf("Sexo", "Hembra", "Macho")) }
+                    )
+                }
+                item {
+                    Campos(
+                        image = painterResource(R.drawable.training1),
+                        text = stringResource(R.string.Entrenamiento),
+                        menu = { CustomDropdownMenu(listOf("Está entrenado?", "Sí", "No")) }
+                    )
+                }
+                item {
+                    Campos(
+                        image = painterResource(R.drawable.antecedentes1),
+                        text = stringResource(R.string.Antecedentes),
+                        dogInfo = dogAntecedentes
+                    )
+                }
+            }
+
+            Button(
+                onClick = {
+                    val allFieldsFilled = email.value.isNotBlank() &&
+                            password.value.isNotBlank() &&
+                            dogName.value.isNotBlank() &&
+                            dogBreed.value.isNotBlank() &&
+                            dogAge.value.isNotBlank() &&
+                            dogWeight.value.isNotBlank() &&
+                            dogAntecedentes.value.isNotBlank() &&
+                            listOf(
+                                "Ubicacion",
+                                "Tamaño",
+                                "Ha tenido pareja?",
+                                "Desea crías?",
+                                "Tiene pedigree?",
+                                "Sexo",
+                                "Está entrenado?"
+                            )
+                                .none { defaultOption -> defaultOption == dogBreed.value || defaultOption == dogAge.value }
+                    if (allFieldsFilled) {
                         authViewModel.registrarUsuario(
                             email.value,
                             password.value,
                             navController
                         )
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFbb4491),
-                        contentColor = Color.White
-                    ),
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .size(250.dp, 60.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.Next),
-                        fontSize = 35.sp,
-                        fontFamily = cocoFontFamily,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Por favor completa todos los campos y selecciona una opción válida.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFbb4491),
+                    contentColor = Color.White
+                ),
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .height(60.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.Next),
+                    fontSize = 20.sp,
+                    fontFamily = cocoFontFamily,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomDropdownMenu() {
-    val list = listOf("Guatemala" , "Baja Verapaz" , "Alta Verapaz" , "El Progreso" , "Izabal" , "Chiquimula" , "Zacapa" , "Santa Rosa" , "Jalapa" , "Jutiapa" , "Sacatepéquez" , "Chimaltenango" , "Escuintla" , "Sololá" , "Totonicapán" , "Quetzaltenango" , "Suchitepéquez" , "Retalhuleu" , "San Marcos" , "Huehuetenango" , "Quiché" , "Petén")
+fun CustomDropdownMenu(list: List<String>) {
+    val list = list
     var isExpanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf(list[0]) }
 
@@ -228,7 +318,7 @@ fun CustomDropdownMenu() {
         Text(
             text = selectedText,
             modifier = Modifier
-                .padding(16.dp)
+                .padding()
                 .clickable { isExpanded = true }
                 .background(Color.White) // Color del contenedor del texto
         )
@@ -270,45 +360,61 @@ fun CustomDropdownMenu() {
 fun Campos(
     image: Painter,
     text: String,
-    dogInfo: MutableState<String>,
+    dogInfo: MutableState<String>? = null,
     onValueChange: ((String) -> Unit)? = null,
     menu: @Composable (() -> Unit)? = null,
 ){
-    Card(colors = CardColors(Color(0xFF78A2AB), Color(0xFFFFFFFF), Color(0xFF78A2AB), Color(0xFF78A2AB)),
-        modifier = Modifier
-            .size(350.dp, 60.dp)
-            .offset(x = 22.dp, y = 200.dp)) {
-        Row(){
-            Image(painter = image,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(50.dp)
-                    .offset(x = 5.dp, y = 5.dp))
-
-            TextField(
-                value = dogInfo.value,
-                colors = get_color(),
-                onValueChange = { value ->
-                    dogInfo.value = value
-                    onValueChange?.invoke(value)
-                },
-                label = { Text(text = text) }
-            )
-
-            if (menu != null) {
-                menu()
-            }
-        }
-    }
-
     Text(text = text,
         color = Color(0xFF54398c),
         fontSize = 15.sp,
         fontFamily = cocoFontFamily,
         fontWeight = FontWeight.Bold,
         modifier = Modifier
-            .offset(x = 80.dp, y = 270.dp)
+            .offset(x = 15.dp, y = 0.dp)
             .padding(50.dp, 0.dp))
+
+    Card(colors = CardColors(Color(0xFF78A2AB), Color(0xFFFFFFFF), Color(0xFF78A2AB), Color(0xFF78A2AB)),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(60.dp)
+            .padding(horizontal = 16.dp, vertical = 4.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ){
+            Image(painter = image,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(50.dp)
+                    .padding(end = 8.dp))
+
+            dogInfo?.let{ nonNullDogInfo ->
+                TextField(
+                    value = nonNullDogInfo.value,
+                    colors = get_color(),
+                    onValueChange = { value ->
+                        nonNullDogInfo.value = value
+                        onValueChange?.invoke(value)
+                    },
+                    label = { Text(text = text) },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            if (menu != null) {
+                Box(
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .padding(start = 8.dp)
+                ) {
+                    menu()
+                }
+            }
+        }
+    }
 }
 
 
