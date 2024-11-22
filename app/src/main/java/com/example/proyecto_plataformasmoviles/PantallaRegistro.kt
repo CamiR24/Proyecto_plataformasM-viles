@@ -60,7 +60,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.ui.Alignment
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.proyecto_plataformasmoviles.data.model.Perfil
+import com.example.proyecto_plataformasmoviles.data.repository.LikesRepository
+import com.example.proyecto_plataformasmoviles.data.repository.MatchesRepository
+import com.example.proyecto_plataformasmoviles.data.repository.PerfilesRepository
 import com.example.proyecto_plataformasmoviles.viewmodel.AuthViewModel
+import com.example.proyecto_plataformasmoviles.viewmodel.PerfilViewModel
+import com.example.proyecto_plataformasmoviles.viewmodel.PerfilViewModelFactory
 
 
 class PantallaRegistro : ComponentActivity() {
@@ -94,6 +101,19 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, auth
     val dogAge = remember { mutableStateOf("") }
     val dogWeight = remember { mutableStateOf("") }
     val dogAntecedentes = remember { mutableStateOf("") }
+    val dogUbicacion = remember { mutableStateOf("") }
+    val dogTamaño = remember { mutableStateOf("") }
+    val dogPareja = remember { mutableStateOf("") }
+    val dogCria = remember { mutableStateOf("") }
+    val dogPedigree = remember { mutableStateOf("") }
+    val dogSexo = remember { mutableStateOf("") }
+    val dogEntrenamiento = remember { mutableStateOf("") }
+
+    val perfilesRepository = PerfilesRepository()
+    val likesRepository = LikesRepository()
+    val matchesRepository = MatchesRepository()
+    val factory = PerfilViewModelFactory(perfilesRepository, likesRepository, matchesRepository)
+    val viewModel: PerfilViewModel = viewModel(factory = factory)
 
     Surface(color = Color(0xFFECCCE2)) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -175,7 +195,8 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, auth
                                     "Huehuetenango",
                                     "Quiché",
                                     "Petén"
-                                )
+                                ),
+                                it
                             )
                         }
                     )
@@ -205,7 +226,8 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, auth
                                     "Pequeño",
                                     "Mediano",
                                     "Grande"
-                                )
+                                ),
+                                it
                             )
                         }
                     )
@@ -214,35 +236,35 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, auth
                     Campos(
                         image = painterResource(R.drawable.partner1),
                         text = stringResource(R.string.Pareja),
-                        menu = { CustomDropdownMenu(listOf("Ha tenido pareja?", "Sí", "No")) }
+                        menu = { CustomDropdownMenu(listOf("Ha tenido pareja?", "Sí", "No"), it) }
                     )
                 }
                 item {
                     Campos(
                         image = painterResource(R.drawable.cria1),
                         text = stringResource(R.string.Cria),
-                        menu = { CustomDropdownMenu(listOf("Desea crías?", "Sí", "No")) }
+                        menu = { CustomDropdownMenu(listOf("Desea crías?", "Sí", "No"), it) }
                     )
                 }
                 item {
                     Campos(
                         image = painterResource(R.drawable.pedigree1),
                         text = stringResource(R.string.Pedigree),
-                        menu = { CustomDropdownMenu(listOf("Tiene pedigree?", "Sí", "No")) }
+                        menu = { CustomDropdownMenu(listOf("Tiene pedigree?", "Sí", "No"), it) }
                     )
                 }
                 item {
                     Campos(
                         image = painterResource(R.drawable.sex1),
                         text = stringResource(R.string.Sexo),
-                        menu = { CustomDropdownMenu(listOf("Sexo", "Hembra", "Macho")) }
+                        menu = { CustomDropdownMenu(listOf("Sexo", "Hembra", "Macho"), it) }
                     )
                 }
                 item {
                     Campos(
                         image = painterResource(R.drawable.training1),
                         text = stringResource(R.string.Entrenamiento),
-                        menu = { CustomDropdownMenu(listOf("Está entrenado?", "Sí", "No")) }
+                        menu = { CustomDropdownMenu(listOf("Está entrenado?", "Sí", "No"), it) }
                     )
                 }
                 item {
@@ -271,13 +293,45 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, auth
                                 "Tiene pedigree?",
                                 "Sexo",
                                 "Está entrenado?"
-                            )
-                                .none { defaultOption -> defaultOption == dogBreed.value || defaultOption == dogAge.value }
+                            ).none { defaultOption -> defaultOption == dogBreed.value || defaultOption == dogAge.value }
+
                     if (allFieldsFilled) {
                         authViewModel.registrarUsuario(
                             email.value,
                             password.value,
-                            navController
+                            onSuccess = { userId ->
+                                // Crear el perfil con los datos proporcionados
+                                val perfil = Perfil(
+                                    antecedentes = dogAntecedentes.value,
+                                    cria = dogCria.value == "Sí",
+                                    edad_del_perro = dogAge.value.toIntOrNull() ?: 0,
+                                    entrenamiento = dogEntrenamiento.value == "Sí",
+                                    nombre_del_perro = dogName.value,
+                                    pareja = dogPareja.value == "Sí",
+                                    pedigree = dogPedigree.value == "Sí",
+                                    peso = dogWeight.value.toIntOrNull() ?: 0,
+                                    raza_del_perro = dogBreed.value,
+                                    sexo = dogSexo.value,
+                                    tamaño = dogTamaño.value,
+                                    ubicacion = dogUbicacion.value,
+                                    usuario_id = userId,
+                                    imagen = "" // Placeholder para imagen
+                                )
+
+                                // Llamar al método de repositorio para guardar el perfil
+                                viewModel.crearPerfil(perfil,
+                                    onSuccess = {
+                                        Toast.makeText(context, "Perfil creado exitosamente.", Toast.LENGTH_SHORT).show()
+                                        navController.navigate("Recomendaciones")
+                                    },
+                                    onError = { error ->
+                                        Toast.makeText(context, "Error al crear perfil: $error", Toast.LENGTH_SHORT).show()
+                                    }
+                                )
+                            },
+                            onFailure = { errorMessage ->
+                                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                            }
                         )
                     } else {
                         Toast.makeText(
@@ -309,14 +363,15 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, auth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomDropdownMenu(list: List<String>) {
-    val list = list
+fun CustomDropdownMenu(
+    list: List<String>,
+    selectedValue: MutableState<String> // Estado externo para capturar la selección
+) {
     var isExpanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf(list[0]) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Text(
-            text = selectedText,
+            text = selectedValue.value,
             modifier = Modifier
                 .padding()
                 .clickable { isExpanded = true }
@@ -325,29 +380,31 @@ fun CustomDropdownMenu(list: List<String>) {
 
         ExposedDropdownMenuBox(
             expanded = isExpanded,
-            onExpandedChange = {isExpanded =! isExpanded}) {
+            onExpandedChange = { isExpanded = !isExpanded }) {
             TextField(
                 modifier = Modifier
                     .menuAnchor()
                     .fillMaxWidth()
                     .fillMaxHeight(),
-                value = selectedText,
+                value = selectedValue.value,
                 onValueChange = {},
                 readOnly = true,
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)},
-
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded) },
                 colors = ExposedDropdownMenuDefaults.textFieldColors(Color(0xFF78A2AB))
             )
 
             ExposedDropdownMenu(
                 expanded = isExpanded,
                 onDismissRequest = { isExpanded = false },
-                modifier = Modifier.background(Color.Transparent)) {
-                list.forEachIndexed{ index, text ->
+                modifier = Modifier.background(Color.Transparent)
+            ) {
+                list.forEach { text ->
                     DropdownMenuItem(
                         text = { Text(text = text) },
-                        onClick = { selectedText = list[index]
-                            isExpanded = false},
+                        onClick = {
+                            selectedValue.value = text
+                            isExpanded = false
+                        },
                         contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
                     )
                 }
@@ -356,42 +413,49 @@ fun CustomDropdownMenu(list: List<String>) {
     }
 }
 
+
 @Composable
 fun Campos(
     image: Painter,
     text: String,
     dogInfo: MutableState<String>? = null,
     onValueChange: ((String) -> Unit)? = null,
-    menu: @Composable (() -> Unit)? = null,
-){
-    Text(text = text,
+    menu: @Composable ((MutableState<String>) -> Unit)? = null, // Recibe un MutableState
+) {
+    Text(
+        text = text,
         color = Color(0xFF54398c),
         fontSize = 15.sp,
         fontFamily = cocoFontFamily,
         fontWeight = FontWeight.Bold,
         modifier = Modifier
             .offset(x = 15.dp, y = 0.dp)
-            .padding(50.dp, 0.dp))
+            .padding(50.dp, 0.dp)
+    )
 
-    Card(colors = CardColors(Color(0xFF78A2AB), Color(0xFFFFFFFF), Color(0xFF78A2AB), Color(0xFF78A2AB)),
+    Card(
+        colors = CardColors(Color(0xFF78A2AB), Color(0xFFFFFFFF), Color(0xFF78A2AB), Color(0xFF78A2AB)),
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)
-            .padding(horizontal = 16.dp, vertical = 4.dp)) {
+            .padding(horizontal = 16.dp, vertical = 4.dp)
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
-        ){
-            Image(painter = image,
+        ) {
+            Image(
+                painter = image,
                 contentDescription = null,
                 modifier = Modifier
                     .size(50.dp)
-                    .padding(end = 8.dp))
+                    .padding(end = 8.dp)
+            )
 
-            dogInfo?.let{ nonNullDogInfo ->
+            dogInfo?.let { nonNullDogInfo ->
                 TextField(
                     value = nonNullDogInfo.value,
                     colors = get_color(),
@@ -405,18 +469,12 @@ fun Campos(
             }
 
             if (menu != null) {
-                Box(
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .padding(start = 8.dp)
-                ) {
-                    menu()
-                }
+                val selectedValue = remember { mutableStateOf("") }
+                menu(selectedValue)
             }
         }
     }
 }
-
 
 fun get_color() = TextFieldColors(Color(0xFFFFFFFF), Color(0xFFFFFFFF), Color(0xFFFFFFFF),Color(0xFFFFFFFF),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),
     TextSelectionColors(Color(0xFFFFFFFF),Color(0xFFFFFFFF)),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB), Color(0xFF78A2AB), Color(0xFFFFFFFF), Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB))

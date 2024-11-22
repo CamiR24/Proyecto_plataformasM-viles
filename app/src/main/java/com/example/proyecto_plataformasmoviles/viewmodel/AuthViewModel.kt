@@ -12,14 +12,19 @@ class AuthViewModel : ViewModel() {
     val signInState: LiveData<Boolean> get() = _signInState
 
     // Función para registrar un nuevo usuario
-    fun registrarUsuario(email: String, password: String, navController: NavController) {
+    fun registrarUsuario(email: String, password: String, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    navController.navigate("InicioSesion")
+                    val userId = task.result?.user?.uid
+                    if (userId != null) {
+                        onSuccess(userId)
+                    } else {
+                        onFailure("No se pudo obtener el ID del usuario.")
+                    }
                 } else {
                     val errorMessage = task.exception?.message ?: "Error desconocido"
-                    // Aquí puedes manejar el mensaje de error si lo necesitas
+                    onFailure(errorMessage)
                 }
             }
     }

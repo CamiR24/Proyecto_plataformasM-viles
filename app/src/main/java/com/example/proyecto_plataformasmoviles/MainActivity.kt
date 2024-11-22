@@ -18,6 +18,7 @@ import androidx.navigation.navArgument
 import com.example.match.DogMatchScreen
 import com.example.proyecto_plataformasmoviles.ui.theme.Proyecto_plataformasMovilesTheme
 import com.example.proyecto_plataformasmoviles.viewmodel.AuthViewModel
+import com.example.proyecto_plataformasmoviles.viewmodel.PerfilViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

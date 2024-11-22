@@ -49,6 +49,21 @@ class PerfilViewModel(private val repository: PerfilesRepository, val likesRepos
     private val _matches = MutableStateFlow<List<Perfil>>(emptyList())
     val matches: StateFlow<List<Perfil>> = _matches
 
+    fun crearPerfil(perfil: Perfil, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            val result = repository.crearPerfil(perfil)
+            if (result.isSuccess) {
+                onSuccess() // Llama al callback de éxito
+            } else {
+                val errorMessage = result.exceptionOrNull()?.message ?: "Error desconocido"
+                onError(errorMessage) // Llama al callback de error
+                _mensajeError.value = errorMessage
+            }
+            _isLoading.value = false
+        }
+    }
+
     fun cargarRecomendacionesPorEdad(edad: Int) {
         viewModelScope.launch {
             _isLoading.value = true
