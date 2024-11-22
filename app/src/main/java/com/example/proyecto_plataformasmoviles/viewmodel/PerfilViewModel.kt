@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.proyecto_plataformasmoviles.data.model.Perfil
 import com.example.proyecto_plataformasmoviles.data.repository.LikesRepository
 import com.example.proyecto_plataformasmoviles.data.repository.MatchesRepository
+import com.example.proyecto_plataformasmoviles.data.repository.NotificacionesRepository
 import com.example.proyecto_plataformasmoviles.data.repository.PerfilesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -239,15 +240,15 @@ class PerfilViewModel(private val repository: PerfilesRepository, val likesRepos
     }
 
     // Dar o quitar "like"
-    fun toggleLike(usuarioId: String, perfilId: String, isLiked: Boolean, matchesRepository: MatchesRepository) {
+    fun toggleLike(usuarioId: String, perfilId: String, isLiked: Boolean, matchesRepository: MatchesRepository, notificacionesRepository: NotificacionesRepository) {
         viewModelScope.launch {
             if (isLiked) {
-                val result = likesRepository.darLike(usuarioId, perfilId, matchesRepository)
+                val result = likesRepository.darLike(usuarioId, perfilId, matchesRepository, notificacionesRepository)
                 if (result.isSuccess) {
                     // Verificar si hay un match después de dar like
                     val matchExists = matchesRepository.verificarMatch(usuarioId, perfilId).getOrDefault(false)
                     if (!matchExists) {
-                        matchesRepository.crearMatch(usuarioId, perfilId)
+                        matchesRepository.crearMatch(usuarioId, perfilId, notificacionesRepository)
                     }
                 } else {
                     _mensajeError.value = "Error al dar like: ${result.exceptionOrNull()?.message}"

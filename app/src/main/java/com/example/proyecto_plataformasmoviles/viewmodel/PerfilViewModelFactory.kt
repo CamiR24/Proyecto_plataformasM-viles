@@ -9,7 +9,7 @@ import com.example.proyecto_plataformasmoviles.data.repository.PerfilesRepositor
 class PerfilViewModelFactory(
     private val perfilesRepository: PerfilesRepository,
     private val likesRepository: LikesRepository,
-    private val matchesRepository: MatchesRepository // Nuevo repositorio
+    private val matchesRepository: MatchesRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PerfilViewModel::class.java)) {

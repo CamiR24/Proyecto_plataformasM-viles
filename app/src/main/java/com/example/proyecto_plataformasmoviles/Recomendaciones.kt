@@ -84,6 +84,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.proyecto_plataformasmoviles.data.model.Perfil
 import com.example.proyecto_plataformasmoviles.data.repository.LikesRepository
 import com.example.proyecto_plataformasmoviles.data.repository.MatchesRepository
+import com.example.proyecto_plataformasmoviles.data.repository.NotificacionesRepository
 import com.example.proyecto_plataformasmoviles.data.repository.PerfilesRepository
 import com.example.proyecto_plataformasmoviles.ui.theme.Proyecto_plataformasMovilesTheme
 import com.example.proyecto_plataformasmoviles.ui.theme.cocoFontFamily
@@ -297,6 +298,7 @@ fun FilaRecomendacion(
     currentUserId: String
 ) {
     val matchesRepository = MatchesRepository() // Nuevo repositorio
+    val notificacionesRepository = NotificacionesRepository()
 
     // Determina la categoría según el título
     val categoria = when (titulo) {
@@ -337,7 +339,7 @@ fun FilaRecomendacion(
                         categoria = categoria,
                         isLiked = likesPorUsuario.contains(perfil.usuario_id),
                         onLikeToggle = { isLiked ->
-                            viewModel.toggleLike(currentUserId, perfil.usuario_id, isLiked, matchesRepository)
+                            viewModel.toggleLike(currentUserId, perfil.usuario_id, isLiked, matchesRepository, notificacionesRepository)
                         }
                     )
                 }
