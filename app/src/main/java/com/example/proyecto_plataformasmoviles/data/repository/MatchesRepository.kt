@@ -27,13 +27,13 @@ class MatchesRepository {
             notificacionesRepository.crearNotificacion(
                 usuarioId = usuarioId1,
                 tipo = 2,
-                mensaje = "¡Hiciste match con el usuario $usuarioId2"
+                mensaje = "¡Hiciste match con el usuario $usuarioId2!"
             )
 
             notificacionesRepository.crearNotificacion(
                 usuarioId = usuarioId2,
                 tipo = 2,
-                mensaje = "¡Hiciste match con el usuario $usuarioId1"
+                mensaje = "¡Hiciste match con el usuario $usuarioId1!"
             )
 
             // Invoca la navegación
@@ -44,7 +44,6 @@ class MatchesRepository {
             Result.failure(e)
         }
     }
-
 
     // Verificar si ya existe un match entre dos usuarios
     suspend fun verificarMatch(usuarioId1: String, usuarioId2: String): Result<Boolean> {

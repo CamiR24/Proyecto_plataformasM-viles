@@ -5,7 +5,37 @@
     <string name="Perfil">PERFIL</string>
     <string name="Nombre">Leah</string>
     <string name="Numero_likes">132,185</string>
-    <string name="Descripcion">%1$s es %2$s de la raza %3$s que vive en %4$s. Tiene %5$d años y %6$s pedigree. %7$s %8$s</string>
+    <string name="Descripcion">%1$s es %2$s de la raza %3$s que vive en %4$s. Tiene %5$d años, pesa %6$d kg y es de tamaño %7$s. %8$s y %9$s. %10$s. Además, %11$s, %12$s.</string>
+
+    <!-- Género -->
+    <string name="sexo_hembra">una hembra</string>
+    <string name="sexo_macho">un macho</string>
+
+    <!-- Pedigree -->
+    <string name="pedigree_tiene">Tiene pedigree</string>
+    <string name="pedigree_no_tiene">No tiene pedigree</string>
+
+    <!-- Antecedentes -->
+    <string name="antecedentes_no_tiene">No tiene enfermedades</string>
+
+    <!-- Pareja -->
+    <string name="pareja_ha_tenido">Ha tenido pareja con anterioridad</string>
+    <string name="pareja_no_ha_tenido">No ha tenido pareja con anterioridad</string>
+
+    <!-- Peso -->
+    <string name="peso_ligero">ligero</string>
+    <string name="peso_pesado">pesado</string>
+
+    <!-- Cría -->
+    <string name="cria_si">le encantaría tener crías</string>
+    <string name="cria_no">no está interesado en tener crías</string>
+
+    <!-- Entrenamiento -->
+    <string name="entrenamiento_si">está muy bien entrenado</string>
+    <string name="entrenamiento_no">aún está aprendiendo</string>
+
+    <!-- Descripción -->
+    <string name="descripcion_no_disponible">Descripción no disponible</string>
 
     //string pantalla registro
     /*

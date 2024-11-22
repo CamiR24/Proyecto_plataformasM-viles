@@ -92,7 +92,7 @@ fun CenterAlignedTopAppBar_Ajustes(navController: NavHostController) {
                     )
                 },
                 actions = {
-                    IconButton(onClick = { navController.navigate("Perfil") },
+                    IconButton(onClick = { navController.navigate("Recomendaciones") },
                         colors = IconButtonColors(Color(0xFFbb4491), Color(0xFFFFFFFF), Color(0xFF54398c), Color(0xFF54398c)),) {
                         Icon(
                             imageVector = Icons.Outlined.Close,

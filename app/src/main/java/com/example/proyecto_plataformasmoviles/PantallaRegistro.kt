@@ -299,6 +299,13 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, auth
                             dogAge.value.isNotBlank() &&
                             dogWeight.value.isNotBlank() &&
                             dogAntecedentes.value.isNotBlank() &&
+                            dogUbicacion.value.isNotBlank() &&
+                            dogTamaño.value.isNotBlank() &&
+                            dogPareja.value.isNotBlank() &&
+                            dogCria.value.isNotBlank() &&
+                            dogPedigree.value.isNotBlank() &&
+                            dogSexo.value.isNotBlank() &&
+                            dogEntrenamiento.value.isNotBlank() &&
                             listOf(
                                 "Ubicacion",
                                 "Tamaño",
@@ -307,7 +314,15 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, auth
                                 "Tiene pedigree?",
                                 "Sexo",
                                 "Está entrenado?"
-                            ).none { defaultOption -> defaultOption == dogBreed.value || defaultOption == dogAge.value }
+                            ).none { defaultOption ->
+                                defaultOption == dogUbicacion.value ||
+                                        defaultOption == dogTamaño.value ||
+                                        defaultOption == dogPareja.value ||
+                                        defaultOption == dogCria.value ||
+                                        defaultOption == dogPedigree.value ||
+                                        defaultOption == dogSexo.value ||
+                                        defaultOption == dogEntrenamiento.value
+                            }
 
                     if (allFieldsFilled) {
                         authViewModel.registrarUsuario(

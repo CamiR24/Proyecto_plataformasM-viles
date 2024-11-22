@@ -266,24 +266,16 @@ class PerfilViewModel(private val repository: PerfilesRepository, val likesRepos
     ) {
         viewModelScope.launch {
             if (isLiked) {
-                val result = likesRepository.darLike(usuarioId, perfilId, matchesRepository, notificacionesRepository, { usuarioId, perfilId ->
+                val result = likesRepository.darLike(
+                    usuarioId,
+                    perfilId,
+                    matchesRepository,
+                    notificacionesRepository
+                ) { id1, id2 ->
                     // Navega al DogMatchScreen con los IDs
-                    navController.navigate("Match/$usuarioId/$perfilId")
-                })
-                if (result.isSuccess) {
-                    // Verificar si hay un match después de dar like
-                    val matchExists = matchesRepository.verificarMatch(usuarioId, perfilId).getOrDefault(false)
-                    if (!matchExists) {
-                        matchesRepository.crearMatch(
-                            usuarioId,
-                            perfilId,
-                            notificacionesRepository
-                        ) { id1, id2 ->
-                            // Navega al DogMatchScreen con los IDs
-                            navController.navigate("Match/$id1/$id2")
-                        }
-                    }
-                } else {
+                    navController.navigate("Match/$id1/$id2")
+                }
+                if (result.isFailure) {
                     _mensajeError.value = "Error al dar like: ${result.exceptionOrNull()?.message}"
                 }
             } else {
@@ -291,6 +283,8 @@ class PerfilViewModel(private val repository: PerfilesRepository, val likesRepos
                 if (result.isSuccess) {
                     // Verificar si había un match y eliminarlo si existe
                     matchesRepository.eliminarMatch(usuarioId, perfilId)
+
+                    _matches.value = _matches.value.filter { it.usuario_id != perfilId }
                 } else {
                     _mensajeError.value = "Error al quitar like: ${result.exceptionOrNull()?.message}"
                 }
@@ -298,8 +292,6 @@ class PerfilViewModel(private val repository: PerfilesRepository, val likesRepos
             cargarLikesPorUsuario(usuarioId) // Refrescar los likes
         }
     }
-
-
 
     // Verificar si un perfil tiene "like" dado por el usuario
     suspend fun verificarLike(usuarioId: String, perfilId: String): Boolean {

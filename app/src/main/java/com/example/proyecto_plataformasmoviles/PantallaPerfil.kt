@@ -71,6 +71,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -254,7 +255,7 @@ fun Perfil(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            Row(modifier = Modifier.offset(x = 40.dp, y = 120.dp)) {
+            Row(modifier = Modifier.offset(x = 40.dp, y = 20.dp)) {
                 Icon(
                     imageVector = Icons.Outlined.AccountCircle,
                     contentDescription = "Icono de usuario",
@@ -276,7 +277,7 @@ fun Perfil(
                 modifier = Modifier
                     .size(380.dp)
                     .wrapContentSize()
-                    .offset(x = 4.dp, y = 140.dp)
+                    .offset(x = 4.dp, y = 40.dp)
             )
 
             // Verifica si el perfil pertenece al usuario actual
@@ -284,7 +285,7 @@ fun Perfil(
 
             Row(
                 modifier = Modifier
-                    .offset(x = 40.dp, y = 157.dp)
+                    .offset(x = 40.dp, y = 57.dp)
                     .clickable(enabled = !isCurrentUser) { onLikeToggle() }
             ) {
                 Icon(
@@ -304,14 +305,47 @@ fun Perfil(
 
             // Descripción dinámica
             val descripcion = perfilUsuario?.let { perfil ->
-                val genero = if (perfil.sexo.equals("Hembra", ignoreCase = true)) "una hembra" else "un macho"
-                val pedigreeTexto = if (perfil.pedigree) "tiene" else "no tiene"
+                val genero = if (perfil.sexo.equals("Hembra", ignoreCase = true)) {
+                    stringResource(R.string.sexo_hembra)
+                } else {
+                    stringResource(R.string.sexo_macho)
+                }
+
+                val pedigreeTexto = if (perfil.pedigree) {
+                    stringResource(R.string.pedigree_tiene)
+                } else {
+                    stringResource(R.string.pedigree_no_tiene)
+                }
+
                 val antecedentes = if (perfil.antecedentes.isNotEmpty()) {
                     perfil.antecedentes
                 } else {
-                    "No tiene enfermedades"
+                    stringResource(R.string.antecedentes_no_tiene)
                 }
-                val parejaTexto = if (perfil.pareja) "ha tenido pareja con anterioridad" else "no ha tenido pareja con anterioridad"
+
+                val parejaTexto = if (perfil.pareja) {
+                    stringResource(R.string.pareja_ha_tenido)
+                } else {
+                    stringResource(R.string.pareja_no_ha_tenido)
+                }
+
+                val criaTexto = if (perfil.cria) {
+                    stringResource(R.string.cria_si)
+                } else {
+                    stringResource(R.string.cria_no)
+                }
+
+                val entrenamientoTexto = if (perfil.entrenamiento) {
+                    stringResource(R.string.entrenamiento_si)
+                } else {
+                    stringResource(R.string.entrenamiento_no)
+                }
+
+                val pesoTexto = if (perfil.peso < 20) {
+                    stringResource(R.string.peso_ligero)
+                } else {
+                    stringResource(R.string.peso_pesado)
+                }
 
                 stringResource(
                     R.string.Descripcion,
@@ -320,19 +354,25 @@ fun Perfil(
                     perfil.raza_del_perro,
                     perfil.ubicacion,
                     perfil.edad_del_perro,
+                    perfil.peso,
+                    perfil.tamaño,
                     pedigreeTexto,
                     antecedentes,
-                    parejaTexto
+                    parejaTexto,
+                    criaTexto,
+                    entrenamientoTexto
                 )
-            } ?: stringResource(R.string.Descripcion, "Descripción no disponible", "", "", "", 0, "", "", "")
+            } ?: stringResource(R.string.descripcion_no_disponible)
+
+
 
             Text(
                 text = descripcion,
                 fontSize = 15.sp,
-                fontFamily = cocoFontFamily,
+                fontFamily = FontFamily.Default,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
-                    .offset(x = 0.dp, y = 160.dp)
+                    .offset(x = 0.dp, y = 60.dp)
                     .padding(50.dp, 0.dp)
             )
         }

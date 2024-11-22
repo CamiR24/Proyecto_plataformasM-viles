@@ -117,7 +117,7 @@ fun LeahProfileSection(userProfile: Perfil) {
             .padding(top = 16.dp)
     ) {
         Image(
-            painter = rememberAsyncImagePainter(userProfile.imagen),
+            painter = painterResource(R.drawable.leah),
             contentDescription = "${userProfile.nombre_del_perro}'s Profile Picture",
             modifier = Modifier
                 .size(40.dp)
@@ -229,7 +229,7 @@ fun CircularProfile(name: String, breed: String, imageUrl: String) {
         }
         Spacer(modifier = Modifier.height(10.dp))
         Image(
-            painter = rememberAsyncImagePainter(imageUrl),
+            painter = painterResource(R.drawable.dog2),
             contentDescription = null,
             modifier = Modifier
                 .size(150.dp)
