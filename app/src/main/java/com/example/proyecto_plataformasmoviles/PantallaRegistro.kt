@@ -55,11 +55,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.TextStyle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.proyecto_plataformasmoviles.data.model.Perfil
 import com.example.proyecto_plataformasmoviles.data.repository.LikesRepository
@@ -169,6 +176,7 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, auth
                     Campos(
                         image = painterResource(R.drawable.ubicacion),
                         text = stringResource(R.string.Ubicacion),
+                        dogInfo = dogUbicacion,
                         menu = {
                             CustomDropdownMenu(
                                 listOf(
@@ -196,7 +204,7 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, auth
                                     "Quiché",
                                     "Petén"
                                 ),
-                                it
+                                dogUbicacion
                             )
                         }
                     )
@@ -219,6 +227,7 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, auth
                     Campos(
                         image = painterResource(R.drawable.size1),
                         text = stringResource(R.string.Tamaño),
+                        dogInfo = dogTamaño,
                         menu = {
                             CustomDropdownMenu(
                                 listOf(
@@ -227,7 +236,7 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, auth
                                     "Mediano",
                                     "Grande"
                                 ),
-                                it
+                                dogTamaño
                             )
                         }
                     )
@@ -236,35 +245,40 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, auth
                     Campos(
                         image = painterResource(R.drawable.partner1),
                         text = stringResource(R.string.Pareja),
-                        menu = { CustomDropdownMenu(listOf("Ha tenido pareja?", "Sí", "No"), it) }
+                        dogInfo = dogPareja,
+                        menu = { CustomDropdownMenu(listOf("Ha tenido pareja?", "Sí", "No"), dogPareja) }
                     )
                 }
                 item {
                     Campos(
                         image = painterResource(R.drawable.cria1),
                         text = stringResource(R.string.Cria),
-                        menu = { CustomDropdownMenu(listOf("Desea crías?", "Sí", "No"), it) }
+                        dogInfo = dogCria,
+                        menu = { CustomDropdownMenu(listOf("Desea crías?", "Sí", "No"), dogCria) }
                     )
                 }
                 item {
                     Campos(
                         image = painterResource(R.drawable.pedigree1),
                         text = stringResource(R.string.Pedigree),
-                        menu = { CustomDropdownMenu(listOf("Tiene pedigree?", "Sí", "No"), it) }
+                        dogInfo = dogPedigree,
+                        menu = { CustomDropdownMenu(listOf("Tiene pedigree?", "Sí", "No"), dogPedigree) }
                     )
                 }
                 item {
                     Campos(
                         image = painterResource(R.drawable.sex1),
                         text = stringResource(R.string.Sexo),
-                        menu = { CustomDropdownMenu(listOf("Sexo", "Hembra", "Macho"), it) }
+                        dogInfo = dogSexo,
+                        menu = { CustomDropdownMenu(listOf("Sexo", "Hembra", "Macho"), dogSexo) }
                     )
                 }
                 item {
                     Campos(
                         image = painterResource(R.drawable.training1),
                         text = stringResource(R.string.Entrenamiento),
-                        menu = { CustomDropdownMenu(listOf("Está entrenado?", "Sí", "No"), it) }
+                        dogInfo = dogEntrenamiento,
+                        menu = { CustomDropdownMenu(listOf("Está entrenado?", "Sí", "No"), dogEntrenamiento) }
                     )
                 }
                 item {
@@ -361,7 +375,6 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, auth
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomDropdownMenu(
     list: List<String>,
@@ -369,112 +382,146 @@ fun CustomDropdownMenu(
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Text(
-            text = selectedValue.value,
+    // Contenedor para el menú desplegable
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        // Caja seleccionable para abrir el menú
+        Box(
             modifier = Modifier
-                .padding()
+                .fillMaxWidth()
                 .clickable { isExpanded = true }
-                .background(Color.White) // Color del contenedor del texto
+                .background(Color(0xFFE0E0E0), shape = RoundedCornerShape(8.dp))
+                .padding(horizontal = 12.dp, vertical = 16.dp)
+        ) {
+            // Texto seleccionado o texto predeterminado
+            Text(
+                text = selectedValue.value.ifEmpty { "Selecciona una opción" },
+                color = Color.Black,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
+        // Menú desplegable
+        DropdownMenu(
+            expanded = isExpanded,
+            onDismissRequest = { isExpanded = false },
+            modifier = Modifier
+                .widthIn(max = 250.dp)
+        ) {
+            list.forEach { item ->
+                DropdownMenuItem(
+                    onClick = {
+                        selectedValue.value = item // Selección del texto
+                        isExpanded = false // Cierra el menú
+                    },
+                    text = { // Aquí usamos el parámetro text directamente
+                        Text(
+                            text = item,
+                            color = Color.Black
+                        )
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun Campos(
+    image: Painter,
+    text: String,
+    dogInfo: MutableState<String>? = null, // Puede ser nulo
+    onValueChange: ((String) -> Unit)? = null,
+    menu: @Composable ((MutableState<String>) -> Unit)? = null // Menú opcional
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        // Título encima del campo
+        Text(
+            text = text,
+            color = Color(0xFF54398c),
+            fontSize = 15.sp,
+            fontFamily = cocoFontFamily,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 4.dp)
         )
 
-        ExposedDropdownMenuBox(
-            expanded = isExpanded,
-            onExpandedChange = { isExpanded = !isExpanded }) {
-            TextField(
+        // Campo de entrada o menú desplegable
+        Card(
+            colors = CardDefaults.cardColors(containerColor = Color(0xFF78A2AB)),
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+        ) {
+            Row(
                 modifier = Modifier
-                    .menuAnchor()
                     .fillMaxWidth()
-                    .fillMaxHeight(),
-                value = selectedValue.value,
-                onValueChange = {},
-                readOnly = true,
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded) },
-                colors = ExposedDropdownMenuDefaults.textFieldColors(Color(0xFF78A2AB))
-            )
-
-            ExposedDropdownMenu(
-                expanded = isExpanded,
-                onDismissRequest = { isExpanded = false },
-                modifier = Modifier.background(Color.Transparent)
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
             ) {
-                list.forEach { text ->
-                    DropdownMenuItem(
-                        text = { Text(text = text) },
-                        onClick = {
-                            selectedValue.value = text
-                            isExpanded = false
-                        },
-                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
-                    )
+                // Imagen a la izquierda
+                Image(
+                    painter = image,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(40.dp)
+                        .padding(end = 8.dp)
+                )
+
+                // Menú desplegable o campo de texto
+                dogInfo?.let { nonNullDogInfo ->
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 8.dp)
+                    ) {
+                        if (menu != null) {
+                            menu(nonNullDogInfo) // Renderizar el menú con el estado de dogInfo
+                        } else {
+                            BasicTextField(
+                                value = nonNullDogInfo.value,
+                                onValueChange = { newValue ->
+                                    nonNullDogInfo.value = newValue // Actualiza el estado
+                                    onValueChange?.invoke(newValue) // Callback opcional
+                                },
+                                textStyle = TextStyle(
+                                    color = Color.White,
+                                    fontSize = 16.sp,
+                                    fontFamily = cocoFontFamily
+                                ),
+                                decorationBox = { innerTextField ->
+                                    Box(
+                                        Modifier.fillMaxSize(),
+                                        contentAlignment = Alignment.CenterStart
+                                    ) {
+                                        if (nonNullDogInfo.value.isEmpty()) {
+                                            Text(
+                                                text = "Escribe aquí...",
+                                                color = Color.LightGray,
+                                                fontSize = 16.sp,
+                                                fontFamily = cocoFontFamily
+                                            )
+                                        }
+                                        innerTextField() // Campo de texto
+                                    }
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }
     }
 }
 
-
-@Composable
-fun Campos(
-    image: Painter,
-    text: String,
-    dogInfo: MutableState<String>? = null,
-    onValueChange: ((String) -> Unit)? = null,
-    menu: @Composable ((MutableState<String>) -> Unit)? = null, // Recibe un MutableState
-) {
-    Text(
-        text = text,
-        color = Color(0xFF54398c),
-        fontSize = 15.sp,
-        fontFamily = cocoFontFamily,
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier
-            .offset(x = 15.dp, y = 0.dp)
-            .padding(50.dp, 0.dp)
-    )
-
-    Card(
-        colors = CardColors(Color(0xFF78A2AB), Color(0xFFFFFFFF), Color(0xFF78A2AB), Color(0xFF78A2AB)),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .padding(horizontal = 16.dp, vertical = 4.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
-        ) {
-            Image(
-                painter = image,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(50.dp)
-                    .padding(end = 8.dp)
-            )
-
-            dogInfo?.let { nonNullDogInfo ->
-                TextField(
-                    value = nonNullDogInfo.value,
-                    colors = get_color(),
-                    onValueChange = { value ->
-                        nonNullDogInfo.value = value
-                        onValueChange?.invoke(value)
-                    },
-                    label = { Text(text = text) },
-                    modifier = Modifier.weight(1f)
-                )
-            }
-
-            if (menu != null) {
-                val selectedValue = remember { mutableStateOf("") }
-                menu(selectedValue)
-            }
-        }
-    }
-}
 
 fun get_color() = TextFieldColors(Color(0xFFFFFFFF), Color(0xFFFFFFFF), Color(0xFFFFFFFF),Color(0xFFFFFFFF),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),
     TextSelectionColors(Color(0xFFFFFFFF),Color(0xFFFFFFFF)),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB), Color(0xFF78A2AB), Color(0xFFFFFFFF), Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB),Color(0xFF78A2AB))

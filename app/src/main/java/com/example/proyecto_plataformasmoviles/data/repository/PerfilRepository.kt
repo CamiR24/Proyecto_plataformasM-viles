@@ -12,14 +12,31 @@ class PerfilesRepository {
     private val db = FirebaseFirestore.getInstance()
     private val perfilesCollection = db.collection("Perfiles")
 
-    // Crear un nuevo perfil
+    // Crear un nuevo perfil con claves iniciando con mayúsculas
     suspend fun crearPerfil(perfil: Perfil): Result<String> {
         return try {
-            val documentRef = perfilesCollection.add(perfil).await()
+            // Transformar las propiedades del perfil a un Map con claves en formato deseado
+            val perfilMap = perfil.toMapWithCapitalizedKeys()
+
+            // Enviar el Map a la base de datos
+            val documentRef = perfilesCollection.add(perfilMap).await()
             Result.success(documentRef.id)
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    // Extensión para convertir un Perfil a un Map con claves iniciando con mayúsculas
+    fun Perfil.toMapWithCapitalizedKeys(): Map<String, Any?> {
+        return this::class.java.declaredFields.associate { field ->
+            field.isAccessible = true
+            field.name.capitalize() to field.get(this)
+        }
+    }
+
+    // Extensión para capitalizar solo la primera letra
+    fun String.capitalize(): String {
+        return this.replaceFirstChar { it.uppercase() }
     }
 
     // Leer todos los perfiles
@@ -98,6 +115,7 @@ class PerfilesRepository {
             val snapshot = perfilesCollection.whereEqualTo("Usuario_id", userId).get().await()
             val perfil = snapshot.documents.firstOrNull()?.toObject<Perfil>() // Obtén el primer documento
             Log.d("AUTH_USER", "Usuario obtenido correctamente con el id: " + userId)
+            Log.d("AUTH_USER", "Usuario obtenido correctamente con el nombre: " + perfil?.nombre_del_perro)
             Result.success(perfil)
         } catch (e: Exception) {
             Log.d("AUTH_USER", "Usuario obtenido incorrectamente con el id: " + userId)
