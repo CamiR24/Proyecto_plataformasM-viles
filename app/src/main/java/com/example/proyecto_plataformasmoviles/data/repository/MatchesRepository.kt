@@ -9,7 +9,7 @@ class MatchesRepository {
     private val matchesCollection = db.collection("Matches")
 
     // Crear un match entre dos usuarios
-    suspend fun crearMatch(usuarioId1: String, usuarioId2: String): Result<Unit> {
+    suspend fun crearMatch(usuarioId1: String, usuarioId2: String, notificacionesRepository: NotificacionesRepository): Result<Unit> {
         return try {
             val match = hashMapOf(
                 "usuario1" to usuarioId1,
@@ -17,6 +17,20 @@ class MatchesRepository {
                 "timestamp" to System.currentTimeMillis()
             )
             matchesCollection.add(match).await()
+
+            //Crear notificaciones de tipo "match" para ambos usuarios
+
+            notificacionesRepository.crearNotificacion(
+                usuarioId = usuarioId1,
+                tipo = 2,
+                mensaje = "¡Hiciste match con el usuario $usuarioId2"
+            )
+
+            notificacionesRepository.crearNotificacion(
+                usuarioId = usuarioId2,
+                tipo = 2,
+                mensaje = "!Hiciste match con el usuario $usuarioId1"
+            )
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
